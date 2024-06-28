@@ -1,0 +1,23 @@
+{
+  "name": "gridboxserver",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "server": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.16.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ergast-client": "^0.2.9",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "prisma": "^5.16.0"
+  }
+}
