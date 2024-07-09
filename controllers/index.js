@@ -9,12 +9,14 @@ export const getDrivers = async (req, res) => {
     try {
         let drivers
 
+        // Find drivers in the database
         drivers = await prisma.driver.findUnique({
             where: {
                 year: Number(req?.body?.year)
             }
         })
 
+        // If database entry is not present, fetch from the API
         if (!drivers) {
             drivers = await new Promise(async (resolve, reject) => {
                 ergast.getDrivers(req?.body?.year, function (err, drivers) {
@@ -22,6 +24,7 @@ export const getDrivers = async (req, res) => {
                 });
             })
 
+            // Create the object
             await prisma.driver.create({
                 data: {
                     year: Number(req?.body?.year),
@@ -29,12 +32,9 @@ export const getDrivers = async (req, res) => {
                 }
             })
 
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
         }
 
+        // Return the year and the drivers
         return res.status(200).send({ drivers: { year: req?.body?.year, drivers } })
 
     } catch (err) {
@@ -49,12 +49,14 @@ export const getConstructors = async (req, res) => {
 
         let constructors
 
+        // Find constructors in database
         constructors = await prisma.constructor.findUnique({
             where: {
                 year: Number(req?.body?.year)
             }
         })
 
+        // If database entry does not exist, fetch from API
         if (!constructors) {
             constructors = await new Promise(async (resolve, reject) => {
                 ergast.getConstructors(req?.body?.year, function (err, constructors) {
@@ -62,6 +64,7 @@ export const getConstructors = async (req, res) => {
                 });
             })
 
+            // Create Object in DB
             await prisma.constructor.create({
                 data: {
                     year: Number(req?.body?.year),
@@ -69,12 +72,10 @@ export const getConstructors = async (req, res) => {
                 }
             })
 
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
+
         }
 
+        // Return the year and the constructors
         return res.status(200).send({ constructors: { year: req?.body?.year, constructors } })
 
     } catch (err) {
@@ -88,12 +89,14 @@ export const getDriverStandings = async (req, res) => {
     try {
         let standings
 
+        // Find the standings in the database
         standings = await prisma.driverstandings.findUnique({
             where: {
                 year: Number(req?.body?.year)
             }
         })
 
+        // If standings are not present in db, fetch from api.
         if (!standings) {
             standings = await new Promise(async (resolve, reject) => {
                 ergast.getDriverStandings(req?.body?.year, function (err, standings) {
@@ -101,6 +104,7 @@ export const getDriverStandings = async (req, res) => {
                 });
             })
 
+            // Create the object in db
             await prisma.driverstandings.create({
                 data: {
                     year: Number(req?.body?.year),
@@ -108,12 +112,10 @@ export const getDriverStandings = async (req, res) => {
                 }
             })
 
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
+
         }
 
+        // Return the year and the standings
         return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
 
     } catch (err) {
@@ -127,12 +129,14 @@ export const getConstructorStandings = async (req, res) => {
     try {
         let standings
 
+        // Find the standings in the database
         standings = await prisma.constructorstandings.findUnique({
             where: {
                 year: Number(req?.body?.year)
             }
         })
 
+        // If standings are not present in db, fetch from api.
         if (!standings) {
             standings = await new Promise(async (resolve, reject) => {
                 ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
@@ -140,6 +144,7 @@ export const getConstructorStandings = async (req, res) => {
                 });
             })
 
+            // Create the object in DB
             await prisma.constructorstandings.create({
                 data: {
                     year: Number(req?.body?.year),
@@ -147,12 +152,9 @@ export const getConstructorStandings = async (req, res) => {
                 }
             })
 
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
         }
 
+        // Return the year and the standings
         return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
 
     } catch (err) {
@@ -166,12 +168,14 @@ export const getCircuits = async (req, res) => {
     try {
         let circuits
 
+        // Find circuits in DB
         circuits = await prisma.circuit.findUnique({
             where: {
                 year: Number(req?.body?.year)
             }
         })
 
+        // If not present in DB, fetch from API.
         if (!circuits) {
             circuits = await new Promise(async (resolve, reject) => {
                 ergast.getCircuits(req?.body?.year, function (err, circuits) {
@@ -179,19 +183,16 @@ export const getCircuits = async (req, res) => {
                 });
             })
 
+            // Create the object in DB
             await prisma.circuit.create({
                 data: {
                     year: Number(req?.body?.year),
                     circuits: circuits
                 }
             })
-
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
         }
 
+        // Return the year and the circuits
         return res.status(200).send({ circuits: { year: req?.body?.year, circuits: circuits } })
 
     } catch (err) {
@@ -205,12 +206,14 @@ export const getSchedule = async (req, res) => {
     try {
         let schedule
 
+        // Find the schedule in database
         schedule = await prisma.schedule.findUnique({
             where: {
                 year: Number(req?.body?.year)
             }
         })
 
+        // If not present in DB, fetch from API
         if (!schedule) {
             schedule = await new Promise(async (resolve, reject) => {
                 ergast.getSeason(req?.body?.year, function (err, season) {
@@ -218,19 +221,16 @@ export const getSchedule = async (req, res) => {
                 });
             })
 
+            // Create the object in db
             await prisma.schedule.create({
                 data: {
                     year: Number(req?.body?.year),
                     raceschedule: schedule
                 }
             })
-
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
         }
 
+        // Return the schedule and the year
         return res.status(200).send({ schedule: { year: req?.body?.year, schedule: schedule } })
 
     } catch (err) {
@@ -244,6 +244,7 @@ export const getRaceResult = async (req, res) => {
     try {
         let result
 
+        // Find the result in the database
         result = await prisma.raceResult.findFirst({
             where: {
                 year: Number(req?.body?.year),
@@ -251,6 +252,7 @@ export const getRaceResult = async (req, res) => {
             }
         })
 
+        // If not present in DB, fetch from API.
         if (!result) {
             result = await new Promise(async (resolve, reject) => {
                 ergast.getRaceResults(req?.body?.year, req?.body?.round, function (err, race) {
@@ -258,6 +260,7 @@ export const getRaceResult = async (req, res) => {
                 });
             })
 
+            // Create the object in DB
             await prisma.raceResult.create({
                 data: {
                     year: Number(req?.body?.year),
@@ -265,14 +268,10 @@ export const getRaceResult = async (req, res) => {
                     result: result
                 }
             })
-
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
         }
 
-        return res.status(200).send({ result: { year: req?.body?.year, result: result } })
+        // Return the year and the result
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
 
     } catch (err) {
         console.log(err)
@@ -285,6 +284,7 @@ export const getQualifyingResult = async (req, res) => {
     try {
         let result
 
+        // Find the result in DB
         result = await prisma.qualifyingresult.findFirst({
             where: {
                 year: Number(req?.body?.year),
@@ -292,6 +292,7 @@ export const getQualifyingResult = async (req, res) => {
             }
         })
 
+        // If result is not in DB, fetch from API
         if (!result) {
             result = await new Promise(async (resolve, reject) => {
                 ergast.getQualifyingResults(req?.body?.year, req?.body?.round, function (err, race) {
@@ -299,6 +300,7 @@ export const getQualifyingResult = async (req, res) => {
                 });
             })
 
+            // Create the object
             await prisma.qualifyingresult.create({
                 data: {
                     year: Number(req?.body?.year),
@@ -307,13 +309,10 @@ export const getQualifyingResult = async (req, res) => {
                 }
             })
 
-            console.log("From API")
-        }
-        else {
-            console.log("From DB")
         }
 
-        return res.status(200).send({ result: { year: req?.body?.year, result: result } })
+        // Return the result and the year
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
 
     } catch (err) {
         console.log(err)

@@ -1,10 +1,10 @@
 import { Router } from "express"
-import { getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getQualifyingResult, getRaceResult } from "../controllers/index.js"
+import { getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getQualifyingResult, getRaceResult, getSchedule } from "../controllers/index.js"
 
 // Create a router.
 const router = Router()
 
-// Default route to check if auth routes are accessible.
+// Default route to check if routes are accessible.
 router.get("/", (req, res) => {
     res.status(200).send({ data: "Default Route" })
 })
@@ -23,6 +23,9 @@ router.post("/getConstructorStandings", getConstructorStandings)
 
 // Get circuits for a certain year.
 router.post("/getCircuits", getCircuits)
+
+// Get circuits for a certain year.
+router.post("/getSchedule", getSchedule)
 
 // Get result for a certain race.
 router.post("/getRaceResult", getRaceResult)
