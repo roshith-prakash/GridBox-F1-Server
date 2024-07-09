@@ -20,7 +20,7 @@
     </ol>
 </li>
 <li>API Routes: (API only has data till 2024.)
-    <ol>
+    <ul>
     <li>/api/v1/getDrivers : To get drivers for a certain year. Pass year in request body.</li>
     <li>/api/v1/getConstructors : To get constructors for a certain year. Pass year in request body.</li>
     <li>/api/v1/getDriverStandings : To get driver standings for a certain year. Pass year in request body.</li>
@@ -29,7 +29,7 @@
     <li>/api/v1/getSchedule : To get race schedule for a certain year. Pass year in request body.</li>
     <li>/api/v1/getRaceResult : To get the race result for a certain round. Pass year and round in request body.</li>
     <li>/api/v1/getQualifyingResult : To get the qualifying result for a certain round. Pass year and round in request body.</li>
-    </ol>
+    </ul>
 </li>
 </ul>
 </p>
