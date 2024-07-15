@@ -20,7 +20,7 @@
     </ol>
 </li>
 </ul>
-API Routes: (API only has data till 2024.)
+API Routes: (API only has data till 2024. All routes are POST routes.)
 <br/><br/>
     <ul>
     <table>
