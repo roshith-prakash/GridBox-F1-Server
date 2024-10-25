@@ -15,17 +15,19 @@ router.post("/getDrivers", getDrivers)
 // Get constructors for a certain year.
 router.post("/getConstructors", getConstructors)
 
-// Get driver standings for a certain year.
-router.post("/getDriverStandings", getDriverStandings)
-
-// Get constructor standings for a certain year.
-router.post("/getConstructorStandings", getConstructorStandings)
-
 // Get circuits for a certain year.
 router.post("/getCircuits", getCircuits)
 
 // Get circuits for a certain year.
 router.post("/getSchedule", getSchedule)
+
+// ------------------------------------------------------------------------------
+
+// Get driver standings for a certain year.
+router.post("/getDriverStandings", getDriverStandings)
+
+// Get constructor standings for a certain year.
+router.post("/getConstructorStandings", getConstructorStandings)
 
 // Get result for a certain race.
 router.post("/getRaceResult", getRaceResult)

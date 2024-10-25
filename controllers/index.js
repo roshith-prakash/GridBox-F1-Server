@@ -15,6 +15,9 @@ export const getDrivers = async (req, res) => {
         drivers = await prisma.driver.findUnique({
             where: {
                 year: Number(req?.body?.year)
+            },
+            select: {
+                drivers: true
             }
         })
 
@@ -27,10 +30,13 @@ export const getDrivers = async (req, res) => {
             })
 
             // Create the object
-            await prisma.driver.create({
+            drivers = await prisma.driver.create({
                 data: {
                     year: Number(req?.body?.year),
                     drivers: drivers
+                },
+                select: {
+                    drivers: true
                 }
             })
 
@@ -55,6 +61,8 @@ export const getConstructors = async (req, res) => {
         constructors = await prisma.constructor.findUnique({
             where: {
                 year: Number(req?.body?.year)
+            }, select: {
+                constructors: true
             }
         })
 
@@ -67,10 +75,13 @@ export const getConstructors = async (req, res) => {
             })
 
             // Create Object in DB
-            await prisma.constructor.create({
+            constructors = await prisma.constructor.create({
                 data: {
                     year: Number(req?.body?.year),
                     constructors: constructors
+                },
+                select: {
+                    constructors: true
                 }
             })
 
@@ -86,6 +97,98 @@ export const getConstructors = async (req, res) => {
     }
 }
 
+// Get Circuits for a specific year
+export const getCircuits = async (req, res) => {
+    try {
+        let circuits
+
+        // Find circuits in DB
+        circuits = await prisma.circuit.findUnique({
+            where: {
+                year: Number(req?.body?.year)
+            },
+            select: {
+                circuits: true
+            }
+        })
+
+        // If not present in DB, fetch from API.
+        if (!circuits) {
+            circuits = await new Promise(async (resolve, reject) => {
+                ergast.getCircuits(req?.body?.year, function (err, circuits) {
+                    resolve(circuits.circuits)
+                });
+            })
+
+            // Create the object in DB
+            circuits = await prisma.circuit.create({
+                data: {
+                    year: Number(req?.body?.year),
+                    circuits: circuits
+                },
+                select: {
+                    circuits: true
+                }
+            })
+        }
+
+        // Return the year and the circuits
+        return res.status(200).send({ circuits: { year: req?.body?.year, circuits: circuits } })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ data: "Something went wrong." })
+    }
+}
+
+// Get Race Schedule for a specific year
+export const getSchedule = async (req, res) => {
+    try {
+        let schedule
+
+        // Find the schedule in database
+        schedule = await prisma.schedule.findUnique({
+            where: {
+                year: Number(req?.body?.year)
+            },
+            select: {
+                raceschedule: true
+            }
+        })
+
+        // If not present in DB, fetch from API
+        if (!schedule) {
+            schedule = await new Promise(async (resolve, reject) => {
+                ergast.getSeason(req?.body?.year, function (err, season) {
+                    resolve(season.races)
+                });
+            })
+
+            // Create the object in db
+            schedule = await prisma.schedule.create({
+                data: {
+                    year: Number(req?.body?.year),
+                    raceschedule: schedule
+                },
+                select: {
+                    raceschedule: true
+                }
+            })
+        }
+
+        // Return the schedule and the year
+        return res.status(200).send({ schedule: { year: req?.body?.year, schedule: schedule } })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ data: "Something went wrong." })
+    }
+}
+
+
+// -------------------------------------------------------------------------------------------
+
+
 // Get Driver Standings for a specific year
 export const getDriverStandings = async (req, res) => {
     try {
@@ -95,6 +198,9 @@ export const getDriverStandings = async (req, res) => {
         standings = await prisma.driverstandings.findUnique({
             where: {
                 year: Number(req?.body?.year)
+            },
+            select: {
+                standings: true
             }
         })
 
@@ -107,10 +213,13 @@ export const getDriverStandings = async (req, res) => {
             })
 
             // Create the object in db
-            await prisma.driverstandings.create({
+            standings = await prisma.driverstandings.create({
                 data: {
                     year: Number(req?.body?.year),
                     standings: standings
+                },
+                select: {
+                    standings: true
                 }
             })
 
@@ -135,6 +244,9 @@ export const getConstructorStandings = async (req, res) => {
         standings = await prisma.constructorstandings.findUnique({
             where: {
                 year: Number(req?.body?.year)
+            },
+            select: {
+                standings: true
             }
         })
 
@@ -147,10 +259,13 @@ export const getConstructorStandings = async (req, res) => {
             })
 
             // Create the object in DB
-            await prisma.constructorstandings.create({
+            standings = await prisma.constructorstandings.create({
                 data: {
                     year: Number(req?.body?.year),
                     standings: standings
+                },
+                select: {
+                    standings: true
                 }
             })
 
@@ -158,82 +273,6 @@ export const getConstructorStandings = async (req, res) => {
 
         // Return the year and the standings
         return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
-
-    } catch (err) {
-        console.log(err)
-        return res.status(500).send({ data: "Something went wrong." })
-    }
-}
-
-// Get Circuits for a specific year
-export const getCircuits = async (req, res) => {
-    try {
-        let circuits
-
-        // Find circuits in DB
-        circuits = await prisma.circuit.findUnique({
-            where: {
-                year: Number(req?.body?.year)
-            }
-        })
-
-        // If not present in DB, fetch from API.
-        if (!circuits) {
-            circuits = await new Promise(async (resolve, reject) => {
-                ergast.getCircuits(req?.body?.year, function (err, circuits) {
-                    resolve(circuits.circuits)
-                });
-            })
-
-            // Create the object in DB
-            await prisma.circuit.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    circuits: circuits
-                }
-            })
-        }
-
-        // Return the year and the circuits
-        return res.status(200).send({ circuits: { year: req?.body?.year, circuits: circuits } })
-
-    } catch (err) {
-        console.log(err)
-        return res.status(500).send({ data: "Something went wrong." })
-    }
-}
-
-// Get Race Schedule for a specific year
-export const getSchedule = async (req, res) => {
-    try {
-        let schedule
-
-        // Find the schedule in database
-        schedule = await prisma.schedule.findUnique({
-            where: {
-                year: Number(req?.body?.year)
-            }
-        })
-
-        // If not present in DB, fetch from API
-        if (!schedule) {
-            schedule = await new Promise(async (resolve, reject) => {
-                ergast.getSeason(req?.body?.year, function (err, season) {
-                    resolve(season.races)
-                });
-            })
-
-            // Create the object in db
-            await prisma.schedule.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    raceschedule: schedule
-                }
-            })
-        }
-
-        // Return the schedule and the year
-        return res.status(200).send({ schedule: { year: req?.body?.year, schedule: schedule } })
 
     } catch (err) {
         console.log(err)

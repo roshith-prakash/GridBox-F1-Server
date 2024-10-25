@@ -2,7 +2,9 @@
 <hr/>
 <p>
 <ul>
+
 <li>This is the node + express server for the backend aspect of the Gridbox project. </li>
+
 <li>The packages used:
     <ul>
     <li>Express - for creating a web server</li>
@@ -11,6 +13,7 @@
     <li>Helmet - for security</li>
     </ul>
 </li>
+
 <li>To run the project : 
     <ol>
     <li>npm install</li>
@@ -20,10 +23,11 @@
     </ol>
 </li>
 </ul>
+
 API Routes: (API only has data till 2024. All routes are POST routes.)
-<br/><br/>
-    <ul>
-    <table>
+
+<ul>
+<table>
     <tr>
     <td>/api/v1/getDrivers</td>
     <td>To get drivers for a certain year. Pass year in request body.</td>
