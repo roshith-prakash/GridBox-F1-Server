@@ -1,5 +1,7 @@
 import { prisma } from "../utils/prismaClient.js"
 import ErgastClient from "ergast-client"
+import dotenv from "dotenv"
+dotenv.config()
 
 // Initializing Ergast Client
 const ergast = new ErgastClient();
