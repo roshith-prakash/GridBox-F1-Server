@@ -185,49 +185,58 @@ export const getSchedule = async (req, res) => {
     }
 }
 
-
-// -------------------------------------------------------------------------------------------
-
-
 // Get Driver Standings for a specific year
 export const getDriverStandings = async (req, res) => {
     try {
         let standings
 
-        // Find the standings in the database
-        standings = await prisma.driverstandings.findUnique({
-            where: {
-                year: Number(req?.body?.year)
-            },
-            select: {
-                standings: true
-            }
-        })
-
-        // If standings are not present in db, fetch from api.
-        if (!standings) {
-            standings = await new Promise(async (resolve, reject) => {
-                ergast.getDriverStandings(req?.body?.year, function (err, standings) {
-                    resolve(standings.standings)
-                });
-            })
-
-            // Create the object in db
-            standings = await prisma.driverstandings.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    standings: standings
+        // Not current year (standings can be saved as they wont change)
+        if (req?.body?.year != new Date().getFullYear()) {
+            // Find the standings in the database
+            standings = await prisma.driverstandings.findUnique({
+                where: {
+                    year: Number(req?.body?.year)
                 },
                 select: {
                     standings: true
                 }
             })
 
+            // If standings are not present in db, fetch from api.
+            if (!standings) {
+                standings = await new Promise(async (resolve, reject) => {
+                    ergast.getDriverStandings(req?.body?.year, function (err, standings) {
+                        resolve(standings.standings)
+                    });
+                })
 
+                // Create the object in db
+                standings = await prisma.driverstandings.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        standings: standings
+                    },
+                    select: {
+                        standings: true
+                    }
+                })
+            }
+
+            // Return the year and the standings
+            return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
+        }
+        // For current year, standings cannot be stored as they can change
+        else {
+            standings = await new Promise(async (resolve, reject) => {
+                ergast.getDriverStandings(req?.body?.year, function (err, standings) {
+                    resolve(standings.standings)
+                });
+            })
+
+            return res.status(200).send({ standings: { year: req?.body?.year, standings: { standings } } })
         }
 
-        // Return the year and the standings
-        return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
+
 
     } catch (err) {
         console.log(err)
@@ -240,39 +249,50 @@ export const getConstructorStandings = async (req, res) => {
     try {
         let standings
 
-        // Find the standings in the database
-        standings = await prisma.constructorstandings.findUnique({
-            where: {
-                year: Number(req?.body?.year)
-            },
-            select: {
-                standings: true
-            }
-        })
-
-        // If standings are not present in db, fetch from api.
-        if (!standings) {
-            standings = await new Promise(async (resolve, reject) => {
-                ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
-                    resolve(standings.standings)
-                });
-            })
-
-            // Create the object in DB
-            standings = await prisma.constructorstandings.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    standings: standings
+        // Not current year (standings can be saved as they wont change)
+        if (req?.body?.year != new Date().getFullYear()) {
+            // Find the standings in the database
+            standings = await prisma.constructorstandings.findUnique({
+                where: {
+                    year: Number(req?.body?.year)
                 },
                 select: {
                     standings: true
                 }
             })
 
-        }
+            // If standings are not present in db, fetch from api.
+            if (!standings) {
+                standings = await new Promise(async (resolve, reject) => {
+                    ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
+                        resolve(standings.standings)
+                    });
+                })
 
-        // Return the year and the standings
-        return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
+                // Create the object in DB
+                standings = await prisma.constructorstandings.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        standings: standings
+                    },
+                    select: {
+                        standings: true
+                    }
+                })
+
+            }
+
+            // Return the year and the standings
+            return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
+        } else {
+            standings = await new Promise(async (resolve, reject) => {
+                ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
+                    resolve(standings.standings)
+                });
+            })
+
+            return res.status(200).send({ standings: { year: req?.body?.year, standings: { standings } } })
+        }
 
     } catch (err) {
         console.log(err)

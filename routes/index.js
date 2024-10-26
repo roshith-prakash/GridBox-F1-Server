@@ -21,8 +21,6 @@ router.post("/getCircuits", getCircuits)
 // Get circuits for a certain year.
 router.post("/getSchedule", getSchedule)
 
-// ------------------------------------------------------------------------------
-
 // Get driver standings for a certain year.
 router.post("/getDriverStandings", getDriverStandings)
 
@@ -34,5 +32,6 @@ router.post("/getRaceResult", getRaceResult)
 
 // Get result for a certain race.
 router.post("/getQualifyingResult", getQualifyingResult)
+
 
 export default router
