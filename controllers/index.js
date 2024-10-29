@@ -322,7 +322,7 @@ export const getRaceResult = async (req, res) => {
             })
 
             // Create the object in DB
-            await prisma.raceResult.create({
+            result = await prisma.raceResult.create({
                 data: {
                     year: Number(req?.body?.year),
                     round: Number(req?.body?.round),
@@ -362,7 +362,7 @@ export const getQualifyingResult = async (req, res) => {
             })
 
             // Create the object
-            await prisma.qualifyingresult.create({
+            result = await prisma.qualifyingresult.create({
                 data: {
                     year: Number(req?.body?.year),
                     round: Number(req?.body?.round),
