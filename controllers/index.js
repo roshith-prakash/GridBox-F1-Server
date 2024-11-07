@@ -29,7 +29,7 @@ export const getDrivers = async (req, res) => {
                         reject("Data unavailable")
                     }
 
-                    if (driver?.drivers) {
+                    if (drivers?.drivers) {
                         resolve(drivers.drivers)
                     } else {
                         reject("Data unavailable")
