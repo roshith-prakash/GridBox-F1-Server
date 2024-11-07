@@ -407,6 +407,21 @@ export const getRaceResult = async (req, res) => {
             }
         })
 
+
+        let raceschedule
+        let race
+
+        if (result) {
+            raceschedule = await prisma.schedule.findUnique({
+                where: { year: req?.body?.year }
+            })
+
+            raceschedule = raceschedule.raceschedule
+
+            race = raceschedule.find(race => race.round == req?.body?.round)
+
+        }
+
         // If not present in DB, fetch from API.
         if (!result) {
             result = await new Promise(async (resolve, reject) => {
@@ -431,10 +446,19 @@ export const getRaceResult = async (req, res) => {
                     result: result
                 }
             })
+
+            raceschedule = await prisma.schedule.findUnique({
+                where: { year: req?.body?.year }
+            })
+
+            raceschedule = raceschedule.raceschedule
+
+            race = raceschedule.find(race => race.round == req?.body?.round)
+
         }
 
         // Return the year and the result
-        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } })
 
     } catch (err) {
         console.log(err)
@@ -454,6 +478,20 @@ export const getQualifyingResult = async (req, res) => {
                 round: Number(req?.body?.round)
             }
         })
+
+        let raceschedule
+        let race
+
+        if (result) {
+            raceschedule = await prisma.schedule.findUnique({
+                where: { year: req?.body?.year }
+            })
+
+            raceschedule = raceschedule.raceschedule
+
+            race = raceschedule.find(race => race.round == req?.body?.round)
+
+        }
 
         // If result is not in DB, fetch from API
         if (!result) {
@@ -480,10 +518,19 @@ export const getQualifyingResult = async (req, res) => {
                 }
             })
 
+            raceschedule = await prisma.schedule.findUnique({
+                where: { year: req?.body?.year }
+            })
+
+            raceschedule = raceschedule.raceschedule
+
+            race = raceschedule.find(race => race.round == req?.body?.round)
+
+
         }
 
         // Return the result and the year
-        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } })
 
     } catch (err) {
         console.log(err)
