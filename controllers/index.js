@@ -25,7 +25,15 @@ export const getDrivers = async (req, res) => {
         if (!drivers) {
             drivers = await new Promise(async (resolve, reject) => {
                 ergast.getDrivers(req?.body?.year, function (err, drivers) {
-                    resolve(drivers.drivers)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (driver?.drivers) {
+                        resolve(drivers.drivers)
+                    } else {
+                        reject("Data unavailable")
+                    }
                 });
             })
 
@@ -47,6 +55,11 @@ export const getDrivers = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -70,7 +83,15 @@ export const getConstructors = async (req, res) => {
         if (!constructors) {
             constructors = await new Promise(async (resolve, reject) => {
                 ergast.getConstructors(req?.body?.year, function (err, constructors) {
-                    resolve(constructors.constructors)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (constructors?.constructors) {
+                        resolve(constructors.constructors)
+                    } else {
+                        reject("Data unavailable")
+                    }
                 });
             })
 
@@ -84,8 +105,6 @@ export const getConstructors = async (req, res) => {
                     constructors: true
                 }
             })
-
-
         }
 
         // Return the year and the constructors
@@ -93,6 +112,11 @@ export const getConstructors = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -116,7 +140,16 @@ export const getCircuits = async (req, res) => {
         if (!circuits) {
             circuits = await new Promise(async (resolve, reject) => {
                 ergast.getCircuits(req?.body?.year, function (err, circuits) {
-                    resolve(circuits.circuits)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (circuits?.circuits) {
+                        resolve(circuits.circuits)
+                    } else {
+                        reject("Data unavailable")
+                    }
+
                 });
             })
 
@@ -137,6 +170,11 @@ export const getCircuits = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -160,7 +198,16 @@ export const getSchedule = async (req, res) => {
         if (!schedule) {
             schedule = await new Promise(async (resolve, reject) => {
                 ergast.getSeason(req?.body?.year, function (err, season) {
-                    resolve(season.races)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (season?.races) {
+                        resolve(season.races)
+                    } else {
+                        reject("Data unavailable")
+                    }
+
                 });
             })
 
@@ -181,6 +228,11 @@ export const getSchedule = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -206,7 +258,15 @@ export const getDriverStandings = async (req, res) => {
             if (!standings) {
                 standings = await new Promise(async (resolve, reject) => {
                     ergast.getDriverStandings(req?.body?.year, function (err, standings) {
-                        resolve(standings.standings)
+                        if (err) {
+                            reject("Data unavailable")
+                        }
+
+                        if (standings?.standings) {
+                            resolve(standings.standings)
+                        } else {
+                            reject("Data unavailable")
+                        }
                     });
                 })
 
@@ -229,7 +289,15 @@ export const getDriverStandings = async (req, res) => {
         else {
             standings = await new Promise(async (resolve, reject) => {
                 ergast.getDriverStandings(req?.body?.year, function (err, standings) {
-                    resolve(standings.standings)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (standings?.standings) {
+                        resolve(standings.standings)
+                    } else {
+                        reject("Data unavailable")
+                    }
                 });
             })
 
@@ -240,6 +308,11 @@ export const getDriverStandings = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -265,7 +338,15 @@ export const getConstructorStandings = async (req, res) => {
             if (!standings) {
                 standings = await new Promise(async (resolve, reject) => {
                     ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
-                        resolve(standings.standings)
+                        if (err) {
+                            reject("Data unavailable")
+                        }
+
+                        if (standings?.standings) {
+                            resolve(standings.standings)
+                        } else {
+                            reject("Data unavailable")
+                        }
                     });
                 })
 
@@ -287,7 +368,15 @@ export const getConstructorStandings = async (req, res) => {
         } else {
             standings = await new Promise(async (resolve, reject) => {
                 ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
-                    resolve(standings.standings)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (standings?.standings) {
+                        resolve(standings.standings)
+                    } else {
+                        reject("Data unavailable")
+                    }
                 });
             })
 
@@ -296,6 +385,11 @@ export const getConstructorStandings = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -317,7 +411,15 @@ export const getRaceResult = async (req, res) => {
         if (!result) {
             result = await new Promise(async (resolve, reject) => {
                 ergast.getRaceResults(req?.body?.year, req?.body?.round, function (err, race) {
-                    resolve(race.driverResults)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (race?.driverResults) {
+                        resolve(race.driverResults)
+                    } else {
+                        reject("Data unavailable")
+                    }
                 });
             })
 
@@ -357,7 +459,15 @@ export const getQualifyingResult = async (req, res) => {
         if (!result) {
             result = await new Promise(async (resolve, reject) => {
                 ergast.getQualifyingResults(req?.body?.year, req?.body?.round, function (err, race) {
-                    resolve(race.driverQualifyingResults)
+                    if (err) {
+                        reject("Data unavailable")
+                    }
+
+                    if (race?.driverQualifyingResults) {
+                        resolve(race.driverQualifyingResults)
+                    } else {
+                        reject("Data unavailable")
+                    }
                 });
             })
 
@@ -377,6 +487,11 @@ export const getQualifyingResult = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }

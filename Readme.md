@@ -1,9 +1,9 @@
-<h1>Gridbox Backend</h1>
+<h1>GridBox F1 Backend</h1>
 <hr/>
 <p>
 <ul>
 
-<li>This is the node + express server for the backend aspect of the Gridbox project. </li>
+<li>This is the node + express server for the backend aspect of the GridBox F1 project. </li>
 
 <li>The packages used:
     <ul>
