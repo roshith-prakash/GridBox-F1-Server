@@ -1,5 +1,6 @@
 import { Router } from "express"
-import { getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getQualifyingResult, getRaceResult, getSchedule } from "../controllers/index.js"
+import { createPost, getAllRecentPosts, getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getPostById, getQualifyingResult, getRaceResult, getSchedule, updatePost } from "../controllers/index.js"
+import upload from "../utils/multer.js"
 
 // Create a router.
 const router = Router()
@@ -32,6 +33,18 @@ router.post("/getRaceResult", getRaceResult)
 
 // Get result for a certain race.
 router.post("/getQualifyingResult", getQualifyingResult)
+
+// Create a new post.
+router.post("/create-post", upload.single("file"), createPost)
+
+// Update a post
+router.post("/update-post", upload.single("file"), updatePost)
+
+// Get recent posts from DB.
+router.post("/get-recent-posts", getAllRecentPosts)
+
+// Get specific post from DB.
+router.post("/get-post", getPostById)
 
 
 export default router

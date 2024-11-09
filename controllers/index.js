@@ -2,6 +2,8 @@ import { prisma } from "../utils/prismaClient.js"
 import ErgastClient from "ergast-client"
 import dotenv from "dotenv"
 dotenv.config()
+import cloudinary from "../utils/cloudinary.cjs";
+import { v4 } from "uuid";
 
 // Initializing Ergast Client
 const ergast = new ErgastClient();
@@ -539,6 +541,180 @@ export const getQualifyingResult = async (req, res) => {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
+        return res.status(500).send({ data: "Something went wrong." })
+    }
+}
+
+// Create a new post.
+export const createPost = async (req, res) => {
+    try {
+
+        // Uploading image to cloudinary
+        cloudinary.uploader.upload(req.file.path, async function (err, result) {
+            // If error during image upload
+            if (err) {
+                console.log(err);
+                return res.status(500).json({
+                    message: "Something went wrong! Please try again."
+                })
+            }
+            // If image upload was successful
+            else {
+
+                try {
+
+                    const uidNum = v4()
+                    let title = String(req?.body?.title)
+                    title = title.replaceAll(" ", "-")
+
+                    const uid = title + "-" + uidNum
+
+                    // Creating post
+                    const createdPost = await prisma.post.create({
+                        data: {
+                            uid: uid,
+                            content: req?.body?.content,
+                            thumbnail: result?.secure_url,
+                            title: req?.body?.title,
+                        }
+                    })
+
+                    // Sending response
+                    return res.status(200).send({ createdPost: createdPost })
+
+
+                } catch (err) {
+                    console.log(err)
+                    return res.status(500).send({ data: "Something went wrong." })
+
+                }
+            }
+        })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).send({ data: "Something went wrong." })
+
+    }
+}
+
+// Update the Post - thumbnail, title, category, otherCategory, content
+export const updatePost = async (req, res) => {
+    try {
+        // If image is uploaded
+        if (req?.file) {
+            cloudinary.uploader.upload(req.file.path, async function (err, result) {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).json({
+                        message: "Something went wrong! Please try again."
+                    })
+                }
+                // If image upload was successful
+                else {
+
+                    // Updating post
+                    const updatedPost = await prisma.post.update({
+                        where: {
+                            id: req?.body?.postId
+                        },
+                        data: {
+                            content: req?.body?.content,
+                            thumbnail: result?.secure_url,
+                            title: req?.body?.title,
+                        }
+                    })
+
+                    // Sending response
+                    return res.status(200).send({ updatedPost: updatedPost })
+                }
+            })
+        }
+        // If image is not uploaded / google image used.
+        else {
+
+            // Updating post
+            const updatedPost = await prisma.post.update({
+                where: {
+                    id: req?.body?.postId
+                },
+                data: {
+                    content: req?.body?.content,
+                    title: req?.body?.title,
+                }
+            })
+
+            // Sending response
+            return res.status(200).send({ updatedPost: updatedPost })
+        }
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).send({ data: "Something went wrong." })
+        return
+    }
+}
+
+// Get the most recent posts.
+export const getAllRecentPosts = async (req, res) => {
+    try {
+        // Get posts from DB - 10 most recent posts.
+        const posts = await prisma.post.findMany({
+            select: {
+                uid: true,
+                title: true,
+                thumbnail: true,
+                createdAt: true
+            },
+            orderBy: {
+                createdAt: "desc"
+            },
+            skip: req?.body?.page * 4,
+            take: 4
+        })
+
+        // Check if next page exists.
+        const nextPage = await prisma.post.count({
+            orderBy: {
+                createdAt: "desc"
+            },
+            skip: (req?.body?.page + 1) * 4,
+            take: 4
+        })
+
+        // Return the posts
+        return res.status(200).send({ posts: posts, nextPage: nextPage != 0 ? req?.body?.page + 1 : null })
+    } catch (err) {
+        // Sending error
+        console.log(err)
+        return res.status(500).send({ data: "Something went wrong." })
+    }
+}
+
+// Get the post by ID.
+export const getPostById = async (req, res) => {
+    try {
+        // Receive the postId from the frontend
+        const postId = req?.body?.postId
+
+        // Get the post correlating to the postId passed.
+        const post = await prisma.post.findUnique({
+            where: {
+                uid: postId
+            },
+        })
+
+        if (post) {
+            // Return the posts
+            return res.status(200).send({ post: post })
+        } else {
+            return res.status(404).send({ error: "Could not find post." })
+        }
+
+
+    } catch (err) {
+        // Sending error
+        console.log(err)
         return res.status(500).send({ data: "Something went wrong." })
     }
 }

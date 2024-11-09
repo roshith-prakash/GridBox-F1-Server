@@ -78,3 +78,19 @@ model RaceResult {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+// Schema for blog post
+model Post {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  // Unique ID to be shown as URL param
+  uid       String   @unique
+  // Title of the post
+  title     String
+  // Content - HTML string from react quill
+  content   String
+  // Thumbnail URL - hosted on cloudinary.
+  thumbnail String
+  // Creation and updation times
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
