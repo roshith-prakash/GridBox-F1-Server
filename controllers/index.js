@@ -413,6 +413,7 @@ export const getRaceResult = async (req, res) => {
         let raceschedule
         let race
 
+        // If race result was found in DB then get the race information (GP name)
         if (result) {
             raceschedule = await prisma.schedule.findUnique({
                 where: { year: req?.body?.year }
@@ -449,6 +450,7 @@ export const getRaceResult = async (req, res) => {
                 }
             })
 
+            // If race result added to DB then get the race information (GP name)
             raceschedule = await prisma.schedule.findUnique({
                 where: { year: req?.body?.year }
             })
@@ -484,6 +486,7 @@ export const getQualifyingResult = async (req, res) => {
         let raceschedule
         let race
 
+        // If qualifying result was found in DB then get the race information (GP name)
         if (result) {
             raceschedule = await prisma.schedule.findUnique({
                 where: { year: req?.body?.year }
@@ -520,6 +523,7 @@ export const getQualifyingResult = async (req, res) => {
                 }
             })
 
+            // If qualifying result was added to DB then get the race information (GP name)
             raceschedule = await prisma.schedule.findUnique({
                 where: { year: req?.body?.year }
             })
