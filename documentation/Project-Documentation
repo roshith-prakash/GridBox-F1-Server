@@ -30,5 +30,5 @@ API Routes:
 - `/api/v1/getSchedule` - To get race schedule for a certain year. Pass year in request body.
 - `/api/v1/getRaceResult` - To get the race result for a certain round. Pass year and round in request body.
 - `/api/v1/getQualifyingResult` - To get the qualifying result for a certain round. Pass year and round in request body.
-- `/get-recent-posts` - To get recently written articles. Implement paginated queries on frontend as api returns 4 objects on call.
-- `/get-post` - To get a specific post. Pass Article UID that was generated to get the post.
+- `/api/v1/get-recent-posts` - To get recently written articles. Implement paginated queries on frontend as api returns 4 objects on call.
+- `/api/v1/get-post` - To get a specific post. Pass Article UID that was generated to get the post.
