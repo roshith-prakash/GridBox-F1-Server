@@ -20,7 +20,11 @@ let server = http.createServer(app, { allowEIO3: true });
 // Using Middleware -------------------------------------------------------------------------------------------
 
 // Whitelist for domains
-const whitelist = ['http://localhost:3000', 'https://gridbox.vercel.app', "https://gridbox-f1.vercel.app"]
+const whitelist = [
+    // 'http://localhost:3000', 
+    'https://gridbox.vercel.app',
+    "https://gridbox-f1.vercel.app"
+]
 
 // Function to deny access to domains except those in whitelist.
 const corsOptions = {
