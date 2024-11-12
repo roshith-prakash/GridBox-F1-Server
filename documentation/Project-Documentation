@@ -15,6 +15,7 @@ Features :
 - Create and Retrieve Articles
 
 The project makes use of Prisma as an ORM to abstract and simplify database operations. 
+A Redis DB is used as a cache to reduce API response times.
 The 'ergast-client' package is used as an wrapper to call the Ergast API. 
 Cloudinary is used to store media and multer + cloudinary's v2 is used to upload provided media to multer.
 Helmet is used to add standard security to the server.
@@ -32,3 +33,5 @@ API Routes:
 - `/api/v1/getQualifyingResult` - To get the qualifying result for a certain round. Pass year and round in request body.
 - `/api/v1/get-recent-posts` - To get recently written articles. Implement paginated queries on frontend as api returns 4 objects on call.
 - `/api/v1/get-post` - To get a specific post. Pass Article UID that was generated to get the post.
+
+All routes except posts are cached.

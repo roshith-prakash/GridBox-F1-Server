@@ -1,9 +1,10 @@
 import { prisma } from "../utils/prismaClient.js"
 import ErgastClient from "ergast-client"
 import dotenv from "dotenv"
-dotenv.config()
 import cloudinary from "../utils/cloudinary.cjs";
 import { v4 } from "uuid";
+import { redisClient } from "../utils/redis.js";
+dotenv.config()
 
 // Initializing Ergast Client
 const ergast = new ErgastClient();
@@ -51,6 +52,9 @@ export const getDrivers = async (req, res) => {
             })
 
         }
+
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`drivers-${req?.body?.year}`, 60 * 60, JSON.stringify({ drivers: { year: req?.body?.year, drivers } }))
 
         // Return the year and the drivers
         return res.status(200).send({ drivers: { year: req?.body?.year, drivers } })
@@ -108,6 +112,9 @@ export const getConstructors = async (req, res) => {
                 }
             })
         }
+
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`constructors-${req?.body?.year}`, 60 * 60, JSON.stringify({ constructors: { year: req?.body?.year, constructors } }))
 
         // Return the year and the constructors
         return res.status(200).send({ constructors: { year: req?.body?.year, constructors } })
@@ -167,6 +174,9 @@ export const getCircuits = async (req, res) => {
             })
         }
 
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`circuits-${req?.body?.year}`, 60 * 60, JSON.stringify({ circuits: { year: req?.body?.year, circuits } }))
+
         // Return the year and the circuits
         return res.status(200).send({ circuits: { year: req?.body?.year, circuits: circuits } })
 
@@ -224,6 +234,9 @@ export const getSchedule = async (req, res) => {
                 }
             })
         }
+
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`schedule-${req?.body?.year}`, 60 * 60, JSON.stringify({ schedule: { year: req?.body?.year, schedule } }))
 
         // Return the schedule and the year
         return res.status(200).send({ schedule: { year: req?.body?.year, schedule: schedule } })
@@ -284,8 +297,11 @@ export const getDriverStandings = async (req, res) => {
                 })
             }
 
+            // 1 hour since this data is in DB and don't need to call API
+            await redisClient.setEx(`drivers-standings-${req?.body?.year}`, 60 * 60, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
+
             // Return the year and the standings
-            return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
+            return res.status(200).send({ standings: { year: req?.body?.year, standings: { standings } } })
         }
         // For current year, standings cannot be stored as they can change
         else {
@@ -302,6 +318,9 @@ export const getDriverStandings = async (req, res) => {
                     }
                 });
             })
+
+            // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
+            await redisClient.setEx(`drivers-standings-${req?.body?.year}`, 60 * 60 * 12, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
 
             return res.status(200).send({ standings: { year: req?.body?.year, standings: { standings } } })
         }
@@ -365,6 +384,10 @@ export const getConstructorStandings = async (req, res) => {
 
             }
 
+            // 1 hour since this data is in DB and don't need to call API
+            await redisClient.setEx(`constructors-standings-${req?.body?.year}`, 60 * 60, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
+
+
             // Return the year and the standings
             return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
         } else {
@@ -381,6 +404,10 @@ export const getConstructorStandings = async (req, res) => {
                     }
                 });
             })
+
+            // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
+            await redisClient.setEx(`constructors-standings-${req?.body?.year}`, 60 * 60 * 12, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
+
 
             return res.status(200).send({ standings: { year: req?.body?.year, standings: { standings } } })
         }
@@ -461,6 +488,10 @@ export const getRaceResult = async (req, res) => {
 
         }
 
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`race-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } }))
+
+
         // Return the year and the result
         return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } })
 
@@ -534,6 +565,10 @@ export const getQualifyingResult = async (req, res) => {
 
 
         }
+
+
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`qualifying-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } }))
 
         // Return the result and the year
         return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } })

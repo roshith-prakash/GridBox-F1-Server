@@ -9,6 +9,7 @@
     <ul>
     <li>Express - for creating a web server</li>
     <li>Prisma - ORM to abstract the DB layer</li>
+    <li>Redis - to cache data</li>
     <li>CORS - for Cross origin requests</li>
     <li>Helmet - for security</li>
     </ul>
@@ -17,7 +18,7 @@
 <li>To run the project : 
     <ol>
     <li>npm install</li>
-    <li>Create an .env file and add the database link + port</li>
+    <li>Create an .env file and add the database link + port + redis info</li>
     <li>npx prisma generate</li>
     <li>npm run dev</li>
     </ol>
@@ -59,6 +60,18 @@ API Routes: (API only has data till 2024. All routes are POST routes.)
     <tr>
     <td>/api/v1/getQualifyingResult</td>
     <td>  To get the qualifying result for a certain round. Pass year and round in request body.</td>
+    </tr>
+    <tr>
+    <td>/api/v1/create-post</td>
+    <td>To create a new article.</td>
+    </tr>
+    <tr>
+    <td>/api/v1/get-recent-posts</td>
+    <td>To get recent posts in a paginated format (4 at a time).</td>
+    </tr>
+    <tr>
+    <td>/api/v1/get-post</td>
+    <td>To get a specific post.</td>
     </tr>
     </table>
 </p>
