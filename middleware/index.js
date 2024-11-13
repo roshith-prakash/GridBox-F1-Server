@@ -1,7 +1,9 @@
 import { redisClient } from "../utils/redis.js";
 
+// To check if data is present in Redis cache
 const cacheMiddleware = async (req, res, next) => {
     try {
+        // Get requested path
         let path = String(req?.originalUrl).split("/")[3]
 
         let result

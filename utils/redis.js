@@ -1,5 +1,6 @@
 import { createClient } from 'redis';
 
+// Create redis client
 export const redisClient = createClient({
     password: process.env.REDIS_PASSWORD,
     socket: {
@@ -8,4 +9,5 @@ export const redisClient = createClient({
     }
 });
 
+// Connect client to db
 await redisClient.connect()

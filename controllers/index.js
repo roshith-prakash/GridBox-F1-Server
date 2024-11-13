@@ -1,14 +1,10 @@
 import { prisma } from "../utils/prismaClient.js"
-import ErgastClient from "ergast-client"
 import dotenv from "dotenv"
 import cloudinary from "../utils/cloudinary.cjs";
 import { v4 } from "uuid";
 import { redisClient } from "../utils/redis.js";
 import axios from "axios"
 dotenv.config()
-
-// Initializing Ergast Client
-const ergast = new ErgastClient();
 
 // Get Drivers for a specific year
 export const getDrivers = async (req, res) => {
