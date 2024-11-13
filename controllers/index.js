@@ -446,10 +446,9 @@ export const getRaceResult = async (req, res) => {
                 where: { year: req?.body?.year }
             })
 
-            raceschedule = raceschedule.raceschedule
+            raceschedule = raceschedule?.raceschedule
 
-            race = raceschedule.find(race => race.round == req?.body?.round)
-
+            race = raceschedule?.find(race => race?.round == req?.body?.round)
         }
 
         // If not present in DB, fetch from API.
@@ -482,9 +481,9 @@ export const getRaceResult = async (req, res) => {
                 where: { year: req?.body?.year }
             })
 
-            raceschedule = raceschedule.raceschedule
+            raceschedule = raceschedule?.raceschedule
 
-            race = raceschedule.find(race => race.round == req?.body?.round)
+            race = raceschedule?.find(race => race?.round == req?.body?.round)
 
         }
 
@@ -523,9 +522,9 @@ export const getQualifyingResult = async (req, res) => {
                 where: { year: req?.body?.year }
             })
 
-            raceschedule = raceschedule.raceschedule
+            raceschedule = raceschedule?.raceschedule
 
-            race = raceschedule.find(race => race.round == req?.body?.round)
+            race = raceschedule?.find(race => race?.round == req?.body?.round)
 
         }
 
@@ -559,9 +558,10 @@ export const getQualifyingResult = async (req, res) => {
                 where: { year: req?.body?.year }
             })
 
-            raceschedule = raceschedule.raceschedule
 
-            race = raceschedule.find(race => race.round == req?.body?.round)
+            raceschedule = raceschedule?.raceschedule
+
+            race = raceschedule?.find(race => race?.round == req?.body?.round)
 
 
         }
