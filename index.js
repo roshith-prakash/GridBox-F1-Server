@@ -49,7 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 // Parses JSON passed inside body.
 app.use(express.json())
 // Enable CORS
-app.use(cors(corsOptions))
+app.use(cors())
 // Add security to server.
 app.use(helmet())
 

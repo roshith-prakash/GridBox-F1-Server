@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import cloudinary from "../utils/cloudinary.cjs";
 import { v4 } from "uuid";
 import { redisClient } from "../utils/redis.js";
+import axios from "axios"
 dotenv.config()
 
 // Initializing Ergast Client
@@ -13,6 +14,8 @@ const ergast = new ErgastClient();
 export const getDrivers = async (req, res) => {
     try {
         let drivers
+
+        console.log(req?.body)
 
         // Find drivers in the database
         drivers = await prisma.driver.findUnique({
@@ -26,31 +29,25 @@ export const getDrivers = async (req, res) => {
 
         // If database entry is not present, fetch from the API
         if (!drivers) {
-            drivers = await new Promise(async (resolve, reject) => {
-                ergast.getDrivers(req?.body?.year, function (err, drivers) {
-                    if (err) {
-                        reject("Data unavailable")
+            let response = await axios.get(`http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}/drivers`)
+
+            drivers = response?.data?.MRData?.DriverTable?.Drivers
+
+            if (drivers && drivers?.length > 0) {
+                // Create the object
+                drivers = await prisma.driver.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        drivers: drivers
+                    },
+                    select: {
+                        drivers: true
                     }
-
-                    if (drivers?.drivers) {
-                        resolve(drivers.drivers)
-                    } else {
-                        reject("Data unavailable")
-                    }
-                });
-            })
-
-            // Create the object
-            drivers = await prisma.driver.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    drivers: drivers
-                },
-                select: {
-                    drivers: true
-                }
-            })
-
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
         }
 
         // 1 hour since this data is in DB and don't need to call API
@@ -87,30 +84,25 @@ export const getConstructors = async (req, res) => {
 
         // If database entry does not exist, fetch from API
         if (!constructors) {
-            constructors = await new Promise(async (resolve, reject) => {
-                ergast.getConstructors(req?.body?.year, function (err, constructors) {
-                    if (err) {
-                        reject("Data unavailable")
-                    }
+            let response = await axios.get(`http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}/constructors`)
 
-                    if (constructors?.constructors) {
-                        resolve(constructors.constructors)
-                    } else {
-                        reject("Data unavailable")
-                    }
-                });
-            })
+            constructors = response?.data?.MRData?.ConstructorTable?.Constructors
 
-            // Create Object in DB
-            constructors = await prisma.constructor.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    constructors: constructors
-                },
-                select: {
-                    constructors: true
-                }
-            })
+            if (constructors && constructors?.length > 0) {
+                // Create the object
+                constructors = await prisma.constructor.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        constructors: constructors
+                    },
+                    select: {
+                        constructors: true
+                    }
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
         }
 
         // 1 hour since this data is in DB and don't need to call API
@@ -147,31 +139,25 @@ export const getCircuits = async (req, res) => {
 
         // If not present in DB, fetch from API.
         if (!circuits) {
-            circuits = await new Promise(async (resolve, reject) => {
-                ergast.getCircuits(req?.body?.year, function (err, circuits) {
-                    if (err) {
-                        reject("Data unavailable")
+            let response = await axios.get(`http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}/circuits`)
+
+            circuits = response?.data?.MRData?.CircuitTable?.Circuits
+
+            if (circuits && circuits?.length > 0) {
+                // Create the object
+                circuits = await prisma.circuit.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        circuits: circuits
+                    },
+                    select: {
+                        circuits: true
                     }
-
-                    if (circuits?.circuits) {
-                        resolve(circuits.circuits)
-                    } else {
-                        reject("Data unavailable")
-                    }
-
-                });
-            })
-
-            // Create the object in DB
-            circuits = await prisma.circuit.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    circuits: circuits
-                },
-                select: {
-                    circuits: true
-                }
-            })
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
         }
 
         // 1 hour since this data is in DB and don't need to call API
@@ -208,31 +194,25 @@ export const getSchedule = async (req, res) => {
 
         // If not present in DB, fetch from API
         if (!schedule) {
-            schedule = await new Promise(async (resolve, reject) => {
-                ergast.getSeason(req?.body?.year, function (err, season) {
-                    if (err) {
-                        reject("Data unavailable")
+            let response = await axios.get(`http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}`)
+
+            schedule = response?.data?.MRData?.RaceTable?.Races
+
+            if (schedule && schedule?.length > 0) {
+                // Create the object
+                schedule = await prisma.schedule.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        raceschedule: schedule
+                    },
+                    select: {
+                        raceschedule: true
                     }
-
-                    if (season?.races) {
-                        resolve(season.races)
-                    } else {
-                        reject("Data unavailable")
-                    }
-
-                });
-            })
-
-            // Create the object in db
-            schedule = await prisma.schedule.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    raceschedule: schedule
-                },
-                select: {
-                    raceschedule: true
-                }
-            })
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
         }
 
         // 1 hour since this data is in DB and don't need to call API
@@ -271,53 +251,38 @@ export const getDriverStandings = async (req, res) => {
 
             // If standings are not present in db, fetch from api.
             if (!standings) {
-                standings = await new Promise(async (resolve, reject) => {
-                    ergast.getDriverStandings(req?.body?.year, function (err, standings) {
-                        if (err) {
-                            reject("Data unavailable")
-                        }
+                let result = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/driverstandings`)
 
-                        if (standings?.standings) {
-                            resolve(standings.standings)
-                        } else {
-                            reject("Data unavailable")
-                        }
-                    });
-                })
+                standings = result?.data?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings
 
-                // Create the object in db
-                standings = await prisma.driverstandings.create({
-                    data: {
-                        year: Number(req?.body?.year),
-                        standings: standings
-                    },
-                    select: {
-                        standings: true
-                    }
-                })
+                if (standings && standings?.length > 0) {
+                    // Create the object in db
+                    standings = await prisma.driverstandings.create({
+                        data: {
+                            year: Number(req?.body?.year),
+                            standings: standings
+                        },
+                        select: {
+                            standings: true
+                        }
+                    })
+                }
+                else {
+                    throw new Error("Data unavailable")
+                }
             }
 
             // 1 hour since this data is in DB and don't need to call API
-            await redisClient.setEx(`drivers-standings-${req?.body?.year}`, 60 * 60, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
+            await redisClient.setEx(`drivers-standings-${req?.body?.year}`, 60 * 60, JSON.stringify({ standings: { year: req?.body?.year, standings: standings } }))
 
             // Return the year and the standings
-            return res.status(200).send({ standings: { year: req?.body?.year, standings: { standings } } })
+            return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
         }
         // For current year, standings cannot be stored as they can change
         else {
-            standings = await new Promise(async (resolve, reject) => {
-                ergast.getDriverStandings(req?.body?.year, function (err, standings) {
-                    if (err) {
-                        reject("Data unavailable")
-                    }
+            let result = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/driverstandings`)
 
-                    if (standings?.standings) {
-                        resolve(standings.standings)
-                    } else {
-                        reject("Data unavailable")
-                    }
-                });
-            })
+            standings = result?.data?.MRData?.StandingsTable?.StandingsLists[0]?.DriverStandings
 
             // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
             await redisClient.setEx(`drivers-standings-${req?.body?.year}`, 60 * 60 * 12, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
@@ -357,53 +322,37 @@ export const getConstructorStandings = async (req, res) => {
 
             // If standings are not present in db, fetch from api.
             if (!standings) {
-                standings = await new Promise(async (resolve, reject) => {
-                    ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
-                        if (err) {
-                            reject("Data unavailable")
+                let result = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/constructorstandings`)
+
+                standings = result?.data?.MRData?.StandingsTable?.StandingsLists[0]?.ConstructorStandings
+
+                if (standings && standings?.length > 0) {
+                    // Create the object in db
+                    standings = await prisma.constructorstandings.create({
+                        data: {
+                            year: Number(req?.body?.year),
+                            standings: standings
+                        },
+                        select: {
+                            standings: true
                         }
-
-                        if (standings?.standings) {
-                            resolve(standings.standings)
-                        } else {
-                            reject("Data unavailable")
-                        }
-                    });
-                })
-
-                // Create the object in DB
-                standings = await prisma.constructorstandings.create({
-                    data: {
-                        year: Number(req?.body?.year),
-                        standings: standings
-                    },
-                    select: {
-                        standings: true
-                    }
-                })
-
+                    })
+                }
+                else {
+                    throw new Error("Data unavailable")
+                }
             }
 
             // 1 hour since this data is in DB and don't need to call API
-            await redisClient.setEx(`constructors-standings-${req?.body?.year}`, 60 * 60, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
+            await redisClient.setEx(`constructors-standings-${req?.body?.year}`, 60 * 60, JSON.stringify({ standings: { year: req?.body?.year, standings: standings } }))
 
 
             // Return the year and the standings
             return res.status(200).send({ standings: { year: req?.body?.year, standings: standings } })
         } else {
-            standings = await new Promise(async (resolve, reject) => {
-                ergast.getConstructorStandings(req?.body?.year, function (err, standings) {
-                    if (err) {
-                        reject("Data unavailable")
-                    }
+            let result = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/constructorstandings`)
 
-                    if (standings?.standings) {
-                        resolve(standings.standings)
-                    } else {
-                        reject("Data unavailable")
-                    }
-                });
-            })
+            standings = result?.data?.MRData?.StandingsTable?.StandingsLists[0]?.ConstructorStandings
 
             // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
             await redisClient.setEx(`constructors-standings-${req?.body?.year}`, 60 * 60 * 12, JSON.stringify({ standings: { year: req?.body?.year, standings: { standings } } }))
@@ -436,63 +385,35 @@ export const getRaceResult = async (req, res) => {
             }
         })
 
-
-        let raceschedule
-        let race
-
-        // If race result was found in DB then get the race information (GP name)
-        if (result) {
-            raceschedule = await prisma.schedule.findUnique({
-                where: { year: req?.body?.year }
-            })
-
-            raceschedule = raceschedule?.raceschedule
-
-            race = raceschedule?.find(race => race?.round == req?.body?.round)
-        }
-
         // If not present in DB, fetch from API.
         if (!result) {
-            result = await new Promise(async (resolve, reject) => {
-                ergast.getRaceResults(req?.body?.year, req?.body?.round, function (err, race) {
-                    if (err) {
-                        reject("Data unavailable")
+            let response = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/${req?.body?.round}/results`)
+
+            result = response?.data?.MRData?.RaceTable?.Races[0]
+
+            if (result) {
+                // Create the object
+                result = await prisma.raceResult.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        round: Number(req?.body?.round),
+                        result: result
+                    },
+                    select: {
+                        result: true
                     }
-
-                    if (race?.driverResults) {
-                        resolve(race.driverResults)
-                    } else {
-                        reject("Data unavailable")
-                    }
-                });
-            })
-
-            // Create the object in DB
-            result = await prisma.raceResult.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    round: Number(req?.body?.round),
-                    result: result
-                }
-            })
-
-            // If race result added to DB then get the race information (GP name)
-            raceschedule = await prisma.schedule.findUnique({
-                where: { year: req?.body?.year }
-            })
-
-            raceschedule = raceschedule?.raceschedule
-
-            race = raceschedule?.find(race => race?.round == req?.body?.round)
-
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
         }
 
         // 1 hour since this data is in DB and don't need to call API
-        await redisClient.setEx(`race-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } }))
-
+        await redisClient.setEx(`race-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result } }))
 
         // Return the year and the result
-        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } })
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
 
     } catch (err) {
         console.log(err)
@@ -504,8 +425,7 @@ export const getRaceResult = async (req, res) => {
 export const getQualifyingResult = async (req, res) => {
     try {
         let result
-
-        // Find the result in DB
+        // Find the result in the database
         result = await prisma.qualifyingresult.findFirst({
             where: {
                 year: Number(req?.body?.year),
@@ -513,65 +433,35 @@ export const getQualifyingResult = async (req, res) => {
             }
         })
 
-        let raceschedule
-        let race
-
-        // If qualifying result was found in DB then get the race information (GP name)
-        if (result) {
-            raceschedule = await prisma.schedule.findUnique({
-                where: { year: req?.body?.year }
-            })
-
-            raceschedule = raceschedule?.raceschedule
-
-            race = raceschedule?.find(race => race?.round == req?.body?.round)
-
-        }
-
-        // If result is not in DB, fetch from API
+        // If not present in DB, fetch from API.
         if (!result) {
-            result = await new Promise(async (resolve, reject) => {
-                ergast.getQualifyingResults(req?.body?.year, req?.body?.round, function (err, race) {
-                    if (err) {
-                        reject("Data unavailable")
+            let response = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/${req?.body?.round}/qualifying`)
+
+            result = response?.data?.MRData?.RaceTable?.Races[0]
+
+            if (result) {
+                // Create the object
+                result = await prisma.qualifyingresult.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        round: Number(req?.body?.round),
+                        result: result
+                    },
+                    select: {
+                        result: true
                     }
-
-                    if (race?.driverQualifyingResults) {
-                        resolve(race.driverQualifyingResults)
-                    } else {
-                        reject("Data unavailable")
-                    }
-                });
-            })
-
-            // Create the object
-            result = await prisma.qualifyingresult.create({
-                data: {
-                    year: Number(req?.body?.year),
-                    round: Number(req?.body?.round),
-                    result: result
-                }
-            })
-
-            // If qualifying result was added to DB then get the race information (GP name)
-            raceschedule = await prisma.schedule.findUnique({
-                where: { year: req?.body?.year }
-            })
-
-
-            raceschedule = raceschedule?.raceschedule
-
-            race = raceschedule?.find(race => race?.round == req?.body?.round)
-
-
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
         }
-
 
         // 1 hour since this data is in DB and don't need to call API
-        await redisClient.setEx(`qualifying-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } }))
+        await redisClient.setEx(`race-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result } }))
 
-        // Return the result and the year
-        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result, race } })
+        // Return the year and the result
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
 
     } catch (err) {
         console.log(err)

@@ -65,7 +65,7 @@ model Qualifyingresult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   year      Int
   round     Int
-  result    Json[]
+  result    Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -74,7 +74,7 @@ model RaceResult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   year      Int
   round     Int
-  result    Json[]
+  result    Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
