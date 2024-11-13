@@ -59,7 +59,7 @@ export const getDrivers = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
@@ -114,7 +114,7 @@ export const getConstructors = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
@@ -169,7 +169,7 @@ export const getCircuits = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
@@ -224,7 +224,7 @@ export const getSchedule = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
@@ -295,7 +295,7 @@ export const getDriverStandings = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
@@ -364,7 +364,7 @@ export const getConstructorStandings = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
@@ -417,6 +417,11 @@ export const getRaceResult = async (req, res) => {
 
     } catch (err) {
         console.log(err)
+
+        if (err == "Error: Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
         return res.status(500).send({ data: "Something went wrong." })
     }
 }
@@ -466,7 +471,7 @@ export const getQualifyingResult = async (req, res) => {
     } catch (err) {
         console.log(err)
 
-        if (err == "Data unavailable") {
+        if (err == "Error: Data unavailable") {
             return res.status(404).send({ data: "Data unavailable." })
         }
 
