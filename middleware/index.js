@@ -38,6 +38,10 @@ const cacheMiddleware = async (req, res, next) => {
         else if (path == "getQualifyingResult") {
             result = await redisClient.get(`qualifying-result-${req?.body?.year}-${req?.body?.round}`)
         }
+        // If race result is requested
+        else if (path == "getSprintResult") {
+            result = await redisClient.get(`sprint-result-${req?.body?.year}-${req?.body?.round}`)
+        }
 
         // If value was present, convert to JSON and send result
         if (result) {

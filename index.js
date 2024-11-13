@@ -25,7 +25,7 @@ let server = http.createServer(app, { allowEIO3: true });
 
 // Whitelist for domains
 const whitelist = [
-    // 'http://localhost:3000', 
+    // 'http://localhost:3000',
     'https://gridbox.vercel.app',
     "https://gridbox-f1.vercel.app"
 ]

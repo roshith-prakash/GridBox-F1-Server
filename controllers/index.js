@@ -479,6 +479,60 @@ export const getQualifyingResult = async (req, res) => {
     }
 }
 
+// Get Sprint Race Result for a specific year
+export const getSprintResult = async (req, res) => {
+    try {
+        let result
+
+        // Find the result in the database
+        result = await prisma.sprintResult.findFirst({
+            where: {
+                year: Number(req?.body?.year),
+                round: Number(req?.body?.round)
+            }
+        })
+
+        // If not present in DB, fetch from API.
+        if (!result) {
+            let response = await axios.get(`https://api.jolpi.ca/ergast/f1/${req?.body?.year}/${req?.body?.round}/sprint`)
+
+            result = response?.data?.MRData?.RaceTable?.Races[0]
+
+            if (result) {
+                // Create the object
+                result = await prisma.sprintResult.create({
+                    data: {
+                        year: Number(req?.body?.year),
+                        round: Number(req?.body?.round),
+                        result: result
+                    },
+                    select: {
+                        result: true
+                    }
+                })
+            }
+            else {
+                throw new Error("Data unavailable")
+            }
+        }
+
+        // 1 hour since this data is in DB and don't need to call API
+        await redisClient.setEx(`sprint-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result } }))
+
+        // Return the year and the result
+        return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
+
+    } catch (err) {
+        console.log(err)
+
+        if (err == "Error: Data unavailable") {
+            return res.status(404).send({ data: "Data unavailable." })
+        }
+
+        return res.status(500).send({ data: "Something went wrong." })
+    }
+}
+
 // Create a new post.
 export const createPost = async (req, res) => {
     try {

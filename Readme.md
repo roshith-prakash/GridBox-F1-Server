@@ -4,6 +4,7 @@
 <ul>
 
 <li>This is the node + express server for the backend aspect of the GridBox F1 project. </li>
+<li>The project makes use of the Jolpica API.</li>
 
 <li>The packages used:
     <ul>
@@ -61,6 +62,9 @@ API Routes: (API only has data till 2024. All routes are POST routes.)
     <td>/api/v1/getQualifyingResult</td>
     <td>  To get the qualifying result for a certain round. Pass year and round in request body.</td>
     </tr>
+    <tr>
+    <td>/api/v1/getSprintResult</td>
+    <td>To get the sprint race result for a certain round. Pass year and round in request body.</td>
     <tr>
     <td>/api/v1/create-post</td>
     <td>To create a new article.</td>

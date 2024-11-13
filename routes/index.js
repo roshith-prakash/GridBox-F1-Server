@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { createPost, getAllRecentPosts, getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getPostById, getQualifyingResult, getRaceResult, getSchedule, updatePost } from "../controllers/index.js"
+import { createPost, getAllRecentPosts, getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getPostById, getQualifyingResult, getRaceResult, getSchedule, getSprintResult, updatePost } from "../controllers/index.js"
 import upload from "../utils/multer.js"
 
 // Create a router.
@@ -10,29 +10,32 @@ router.get("/", (req, res) => {
     res.status(200).send({ data: "Default Route" })
 })
 
-// Get drivers for a certain year.
+// Get drivers for a specific year.
 router.post("/getDrivers", getDrivers)
 
-// Get constructors for a certain year.
+// Get constructors for a specific year.
 router.post("/getConstructors", getConstructors)
 
-// Get circuits for a certain year.
+// Get circuits for a specific year.
 router.post("/getCircuits", getCircuits)
 
-// Get circuits for a certain year.
+// Get circuits for a specific year.
 router.post("/getSchedule", getSchedule)
 
-// Get driver standings for a certain year.
+// Get driver standings for a specific year.
 router.post("/getDriverStandings", getDriverStandings)
 
-// Get constructor standings for a certain year.
+// Get constructor standings for a specific year.
 router.post("/getConstructorStandings", getConstructorStandings)
 
-// Get result for a certain race.
+// Get result for a specific race.
 router.post("/getRaceResult", getRaceResult)
 
-// Get result for a certain race.
+// Get result for a specific race.
 router.post("/getQualifyingResult", getQualifyingResult)
+
+// Get result for a specific sprint race.
+router.post("/getSprintResult", getSprintResult)
 
 // Create a new post.
 router.post("/create-post", upload.single("file"), createPost)

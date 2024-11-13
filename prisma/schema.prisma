@@ -79,6 +79,15 @@ model RaceResult {
   updatedAt DateTime @updatedAt
 }
 
+model SprintResult {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  year      Int
+  round     Int
+  result    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // Schema for blog post
 model Post {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
