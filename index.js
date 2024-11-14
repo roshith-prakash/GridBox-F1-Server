@@ -13,6 +13,7 @@ import routes from "./routes/index.js"
 // Importing Middleware ----------------------------------------------------------------------------------------------
 
 import middleware from "./middleware/index.js"
+import axios from "axios";
 
 // Initializing Server -------------------------------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ let server = http.createServer(app, { allowEIO3: true });
 
 // Whitelist for domains
 const whitelist = [
-    // 'http://localhost:3000',
+    'https://keep-api-alive.onrender.com',
     'https://gridbox.vercel.app',
     "https://gridbox-f1.vercel.app"
 ]
@@ -66,6 +67,17 @@ app.use("/api/v1", middleware, routes)
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 
+setInterval(async () => {
+    try {
+        let result = await axios.get("https://keep-api-alive.onrender.com")
+        console.log(result?.data)
+    } catch (err) {
+        console.log(err)
+    }
+}, 1000 * 30)
+
 server.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 });
+
+
