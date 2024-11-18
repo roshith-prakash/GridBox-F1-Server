@@ -11,8 +11,6 @@ export const getDrivers = async (req, res) => {
     try {
         let drivers
 
-        console.log(req?.body)
-
         // Find drivers in the database
         drivers = await prisma.driver.findUnique({
             where: {
