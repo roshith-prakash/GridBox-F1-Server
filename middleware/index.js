@@ -47,7 +47,6 @@ const cacheMiddleware = async (req, res, next) => {
 
         // If value was present, convert to JSON and send result
         if (result) {
-            console.log("From Cache")
             return res.status(200).send(JSON.parse(result))
         } else {
             next();

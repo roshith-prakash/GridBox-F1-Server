@@ -399,6 +399,12 @@ export const getRaceResult = async (req, res) => {
                         result: true
                     }
                 })
+
+                // 1 hour since this data is in DB and don't need to call API
+                await redisClient.setEx(`race-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result } }))
+
+                // Return the year and the result
+                return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
             }
             else {
                 throw new Error("Data unavailable")
@@ -459,7 +465,7 @@ export const getQualifyingResult = async (req, res) => {
         }
 
         // 1 hour since this data is in DB and don't need to call API
-        await redisClient.setEx(`race-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result } }))
+        await redisClient.setEx(`qualifying-result-${req?.body?.year}-${req?.body?.round}`, 60 * 60, JSON.stringify({ result: { year: req?.body?.year, round: req?.body?.round, result: result } }))
 
         // Return the year and the result
         return res.status(200).send({ result: { year: req?.body?.year, round: req?.body?.round, result: result } })
