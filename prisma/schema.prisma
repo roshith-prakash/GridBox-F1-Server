@@ -99,6 +99,8 @@ model Post {
   content   String
   // Thumbnail URL - hosted on cloudinary.
   thumbnail String
+  // If image should be contained
+  contain   Boolean  @default(false)
   // Creation and updation times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
