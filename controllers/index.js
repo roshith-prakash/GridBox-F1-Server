@@ -564,7 +564,7 @@ export const createPost = async (req, res) => {
                             content: req?.body?.content,
                             thumbnail: result?.secure_url,
                             title: req?.body?.title,
-                            contain: Boolean(req?.body?.contain)
+                            contain: req?.body?.contain == 'false' ? false : true
                         }
                     })
 
