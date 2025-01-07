@@ -1,6 +1,6 @@
 import { Router } from "express"
-import { createPost, getAllRecentPosts, getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getPostById, getQualifyingResult, getRaceResult, getSchedule, getSprintResult, updatePost } from "../controllers/index.js"
-import upload from "../utils/multer.js"
+import { createPost, getAllRecentPosts, getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getPostById, getQualifyingResult, getRaceResult, getSchedule, getSprintResult, updatePost } from "../controllers/index.ts"
+import upload from "../utils/multer.ts"
 
 // Create a router.
 const router = Router()
