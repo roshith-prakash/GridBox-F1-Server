@@ -2,7 +2,7 @@ import http from "http";
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
-import cors from "cors";
+import cors, { CorsOptions } from "cors";
 dotenv.config();
 
 // Importing Routes ----------------------------------------------------------------------------------------------
@@ -21,17 +21,20 @@ let server = http.createServer(app);
 // Using Middleware -------------------------------------------------------------------------------------------
 
 // Whitelist for domains
-const whitelist = [
+const whitelist: string[] = [
   "http://localhost:3000",
   "https://gridbox.vercel.app",
   "https://gridbox-f1.vercel.app",
 ];
 
 // Function to deny access to domains except those in whitelist.
-const corsOptions = {
-  origin: function (origin: any, callback: any) {
+const corsOptions: CorsOptions = {
+  origin: function (
+    origin: string | undefined,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) {
     // Find request domain and check in whitelist.
-    if (whitelist.indexOf(origin) !== -1) {
+    if (origin && whitelist.indexOf(origin) !== -1) {
       // Accept request
       callback(null, true);
     } else {
