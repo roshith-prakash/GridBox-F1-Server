@@ -21,6 +21,7 @@
     <li>npm install</li>
     <li>Create an .env file and add the database link + port + redis info</li>
     <li>npx prisma generate</li>
+    <li>npm run build</li>
     <li>npm run dev</li>
     </ol>
 </li>
