@@ -1,22 +1,24 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" version="24.8.4">
   <diagram name="Page-1" id="pVZbfo8u7nvyNFJD3p_k">
-    <mxGraphModel dx="2111" dy="724" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2061" dy="691" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="2tnwP77bM6gt75-0TUja-1" value="Website" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="595" y="285" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="2tnwP77bM6gt75-0TUja-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="2tnwP77bM6gt75-0TUja-2" target="2tnwP77bM6gt75-0TUja-14" edge="1">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="2tnwP77bM6gt75-0TUja-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" parent="1" source="2tnwP77bM6gt75-0TUja-2" target="zdp7WG90-OuLrdoUv5ZE-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="320" y="550" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="2tnwP77bM6gt75-0TUja-2" target="DewGaWtgtEkTo9dNl7sz-1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;entryX=0.25;entryY=1;entryDx=0;entryDy=0;" parent="1" source="2tnwP77bM6gt75-0TUja-2" target="DewGaWtgtEkTo9dNl7sz-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="2tnwP77bM6gt75-0TUja-2" value="Node JS Server" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="290" y="285" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="2tnwP77bM6gt75-0TUja-4" target="DewGaWtgtEkTo9dNl7sz-1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="2tnwP77bM6gt75-0TUja-4" target="DewGaWtgtEkTo9dNl7sz-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="2tnwP77bM6gt75-0TUja-4" value="Mongo DB" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;" parent="1" vertex="1">
@@ -47,7 +49,7 @@
           <mxGeometry x="465" y="330" width="90" height="30" as="geometry" />
         </mxCell>
         <mxCell id="2tnwP77bM6gt75-0TUja-10" value="Check if data exists in DB" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="100" y="248" width="160" height="30" as="geometry" />
+          <mxGeometry x="110" y="248" width="160" height="30" as="geometry" />
         </mxCell>
         <mxCell id="2tnwP77bM6gt75-0TUja-11" value="" style="endArrow=classic;html=1;rounded=0;exitX=1.03;exitY=0.776;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;exitPerimeter=0;" parent="1" source="2tnwP77bM6gt75-0TUja-4" target="2tnwP77bM6gt75-0TUja-2" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -58,11 +60,10 @@
         <mxCell id="2tnwP77bM6gt75-0TUja-12" value="Return data if it exists" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="110" y="360" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="2tnwP77bM6gt75-0TUja-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" source="2tnwP77bM6gt75-0TUja-14" target="2tnwP77bM6gt75-0TUja-2" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="2tnwP77bM6gt75-0TUja-14" value="Ergast API" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="290" y="550" width="120" height="60" as="geometry" />
+        <mxCell id="2tnwP77bM6gt75-0TUja-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0.75;entryY=1;entryDx=0;entryDy=0;" parent="1" source="zdp7WG90-OuLrdoUv5ZE-1" target="2tnwP77bM6gt75-0TUja-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="550" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="2tnwP77bM6gt75-0TUja-16" value="Request Data from ergast server &lt;br&gt;if data is not present in DB" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="120" y="465" width="200" height="40" as="geometry" />
@@ -70,26 +71,31 @@
         <mxCell id="2tnwP77bM6gt75-0TUja-18" value="Write data to DB and return to website" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="390" y="470" width="230" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="DewGaWtgtEkTo9dNl7sz-1" target="2tnwP77bM6gt75-0TUja-2">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;" parent="1" source="DewGaWtgtEkTo9dNl7sz-1" target="2tnwP77bM6gt75-0TUja-2" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-1" value="Redis Cache" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-1" value="Redis Cache" style="rounded=1;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="290" y="70" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-4" value="Check if data is &lt;br&gt;present in cache" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-4" value="Check if data is &lt;br&gt;present in cache" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="210" y="163" width="110" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-5" value="Return data &lt;br&gt;if present" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-5" value="Return data &lt;br&gt;if present" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="380" y="163" width="90" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-7" value="Cache Requested values" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-7" value="Cache Requested values" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="40" y="70" width="160" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="2tnwP77bM6gt75-0TUja-14" target="2tnwP77bM6gt75-0TUja-4">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="zdp7WG90-OuLrdoUv5ZE-1" target="2tnwP77bM6gt75-0TUja-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="290" y="580" as="sourcePoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="DewGaWtgtEkTo9dNl7sz-9" value="Store data received from API&amp;nbsp;&lt;br&gt;(except standings for current year)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="DewGaWtgtEkTo9dNl7sz-9" value="Store data received from API&amp;nbsp;&lt;br&gt;(except standings for current year)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="40" y="580" width="210" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zdp7WG90-OuLrdoUv5ZE-1" value="Jolpica API" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="550" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

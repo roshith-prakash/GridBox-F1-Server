@@ -65,7 +65,7 @@ model Qualifyingresult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   year      Int
   round     Int
-  result    Json[]
+  result    Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -74,7 +74,16 @@ model RaceResult {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   year      Int
   round     Int
-  result    Json[]
+  result    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SprintResult {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  year      Int
+  round     Int
+  result    Json
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -90,6 +99,8 @@ model Post {
   content   String
   // Thumbnail URL - hosted on cloudinary.
   thumbnail String
+  // If image should be contained
+  contain   Boolean  @default(false)
   // Creation and updation times
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
