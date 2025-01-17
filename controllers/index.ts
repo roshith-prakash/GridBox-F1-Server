@@ -282,6 +282,8 @@ export const getDriverStandings = async (
   try {
     let standings;
 
+    console.log(req?.body);
+
     // Not current year (standings can be saved as they wont change)
     if (req?.body?.year != new Date().getFullYear()) {
       // Find the standings in the database
@@ -304,6 +306,8 @@ export const getDriverStandings = async (
           result?.data?.MRData?.StandingsTable?.StandingsLists[0]
             ?.DriverStandings;
 
+        console.log(standings);
+
         if (standings && standings?.length > 0) {
           // Create the object in db
           standings = await prisma.driverstandings.create({
@@ -316,6 +320,7 @@ export const getDriverStandings = async (
             },
           });
         } else {
+          console.log("Driver Standings unavailable.");
           throw new Error("Data unavailable");
         }
       }
@@ -344,6 +349,13 @@ export const getDriverStandings = async (
       standings =
         result?.data?.MRData?.StandingsTable?.StandingsLists[0]
           ?.DriverStandings;
+
+      console.log(standings);
+
+      if (!standings || standings?.length == 0) {
+        console.log("Driver Standings unavailable.");
+        throw new Error("Data unavailable");
+      }
 
       // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
       await redisClient.setEx(
@@ -440,6 +452,11 @@ export const getConstructorStandings = async (
       standings =
         result?.data?.MRData?.StandingsTable?.StandingsLists[0]
           ?.ConstructorStandings;
+
+      if (!standings || standings?.length == 0) {
+        console.log("Driver Standings unavailable.");
+        throw new Error("Data unavailable");
+      }
 
       // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
       await redisClient.setEx(

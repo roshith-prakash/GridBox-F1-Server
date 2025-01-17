@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "dev": "nodemon dist/index.js",
+    "dev": "npx tsc && nodemon dist/index.js",
     "server": "node dist/index.js",
     "studio": "prisma studio",
     "postinstall": "npx prisma generate"
