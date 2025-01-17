@@ -7,7 +7,9 @@
   "scripts": {
     "build": "npx tsc",
     "dev": "nodemon dist/index.js",
-    "server": "node dist/index.js"
+    "server": "node dist/index.js",
+    "studio": "prisma studio",
+    "postinstall": "npx prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -25,11 +27,13 @@
     "multer": "^1.4.5-lts.1",
     "prisma": "^5.16.0",
     "redis": "^4.7.0",
-    "uuid": "^11.0.2"
+    "uuid": "^11.0.2",
+    "vercel": "^39.2.6"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.10.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
