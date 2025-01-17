@@ -306,8 +306,6 @@ export const getDriverStandings = async (
           result?.data?.MRData?.StandingsTable?.StandingsLists[0]
             ?.DriverStandings;
 
-        console.log(standings);
-
         if (standings && standings?.length > 0) {
           // Create the object in db
           standings = await prisma.driverstandings.create({
@@ -320,7 +318,6 @@ export const getDriverStandings = async (
             },
           });
         } else {
-          console.log("Driver Standings unavailable.");
           throw new Error("Data unavailable");
         }
       }
@@ -349,8 +346,6 @@ export const getDriverStandings = async (
       standings =
         result?.data?.MRData?.StandingsTable?.StandingsLists[0]
           ?.DriverStandings;
-
-      console.log(standings);
 
       if (!standings || standings?.length == 0) {
         console.log("Driver Standings unavailable.");
