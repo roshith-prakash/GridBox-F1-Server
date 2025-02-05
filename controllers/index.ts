@@ -920,3 +920,32 @@ export const getPostById = async (
     return;
   }
 };
+
+// Get the details for the next race
+export const getNextRace = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    let response = await axios.get(
+      `https://api.jolpi.ca/ergast/f1/current/next`
+    );
+
+    let result = response?.data?.MRData?.RaceTable?.Races[0];
+
+    // 15 min cache duration
+    await redisClient.setEx(
+      `next-race`,
+      60 * 15,
+      JSON.stringify({ nextRace: result })
+    );
+
+    // Return the next race
+    res.status(200).send({ nextRace: result });
+  } catch (err) {
+    // Sending error
+    console.log(err);
+    res.status(500).send({ data: "Something went wrong." });
+    return;
+  }
+};

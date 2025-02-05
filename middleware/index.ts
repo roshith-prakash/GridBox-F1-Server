@@ -56,10 +56,12 @@ const cacheMiddleware = async (
       result = await redisClient.get(
         `sprint-result-${req?.body?.year}-${req?.body?.round}`
       );
+    } else if (path == "getNextRace") {
+      result = await redisClient.get(`next-race`);
     }
 
-    // If value was present, convert to JSON and send result
     if (result) {
+      // If value was present, convert to JSON and send result
       res.status(200).send(JSON.parse(result));
       return;
     } else {
