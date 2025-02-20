@@ -21,7 +21,7 @@ let server = http.createServer(app);
 // Using Middleware -------------------------------------------------------------------------------------------
 
 // Whitelist for domains
-const whitelist: string[] = [
+const whitelist = [
   "http://localhost:3000",
   "https://gridbox.vercel.app",
   "https://gridbox-f1.vercel.app",
@@ -56,7 +56,7 @@ app.use(helmet());
 // Routes -------------------------------------------------------------------------------------------
 
 // Default route to check if server is working.
-app.get("/", (req, res) => {
+app.get("/", (_, res) => {
   res.status(200).send("We are good to go!");
 });
 
