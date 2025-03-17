@@ -11,7 +11,7 @@ import routes from "./routes/index.ts";
 
 // Importing Middleware ----------------------------------------------------------------------------------------------
 
-// import middleware from "./middleware/index.ts";
+import middleware from "./middleware/index.ts";
 
 // Initializing Server -------------------------------------------------------------------------------------------
 
@@ -62,7 +62,7 @@ app.get("/", (_, res) => {
 
 // Routes -----------------------------------------------------------------------------------------
 
-app.use("/api/v1", routes);
+app.use("/api/v1", middleware, routes);
 
 // Listening on PORT -------------------------------------------------------------------------------------------
 

@@ -2,7 +2,7 @@ import { prisma } from "../utils/prismaClient.ts";
 import dotenv from "dotenv";
 import cloudinary from "../utils/cloudinary.ts";
 import { v4 } from "uuid";
-// import { redisClient } from "../utils/redis.ts";
+import { redisClient } from "../utils/redis.ts";
 import axios from "axios";
 import { Request, Response } from "express";
 dotenv.config();
@@ -352,14 +352,14 @@ export const getDriverStandings = async (
         throw new Error("Data unavailable");
       }
 
-      // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
-      // await redisClient.setEx(
-      //   `drivers-standings-${req?.body?.year}`,
-      //   60 * 60 * 12,
-      //   JSON.stringify({
-      //     standings: { year: req?.body?.year, standings: { standings } },
-      //   })
-      // );
+      // 24 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
+      await redisClient.setEx(
+        `drivers-standings-${req?.body?.year}`,
+        60 * 60 * 24,
+        JSON.stringify({
+          standings: { year: req?.body?.year, standings: { standings } },
+        })
+      );
 
       res.status(200).send({
         standings: { year: req?.body?.year, standings: { standings } },
@@ -453,14 +453,14 @@ export const getConstructorStandings = async (
         throw new Error("Data unavailable");
       }
 
-      // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
-      // await redisClient.setEx(
-      //   `constructors-standings-${req?.body?.year}`,
-      //   60 * 60 * 12,
-      //   JSON.stringify({
-      //     standings: { year: req?.body?.year, standings: { standings } },
-      //   })
-      // );
+      // 24 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
+      await redisClient.setEx(
+        `constructors-standings-${req?.body?.year}`,
+        60 * 60 * 24,
+        JSON.stringify({
+          standings: { year: req?.body?.year, standings: { standings } },
+        })
+      );
 
       res.status(200).send({
         standings: { year: req?.body?.year, standings: { standings } },
@@ -933,12 +933,12 @@ export const getNextRace = async (
 
     let result = response?.data?.MRData?.RaceTable?.Races[0];
 
-    // 15 min cache duration
-    // await redisClient.setEx(
-    //   `next-race`,
-    //   60 * 15,
-    //   JSON.stringify({ nextRace: result })
-    // );
+    // 12 hour cache duration
+    await redisClient.setEx(
+      `next-race`,
+      60 * 60 * 12,
+      JSON.stringify({ nextRace: result })
+    );
 
     // Return the next race
     res.status(200).send({ nextRace: result });
