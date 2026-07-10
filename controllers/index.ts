@@ -50,11 +50,11 @@ export const getDrivers = async (
     }
 
     // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `drivers-${req?.body?.year}`,
-      60 * 60,
-      JSON.stringify({ drivers: { year: req?.body?.year, drivers } })
-    );
+    // await redisClient.setEx(
+    //   `drivers-${req?.body?.year}`,
+    //   60 * 60,
+    //   JSON.stringify({ drivers: { year: req?.body?.year, drivers } })
+    // );
 
     // Return the year and the drivers
     res.status(200).send({ drivers: { year: req?.body?.year, drivers } });
@@ -115,11 +115,11 @@ export const getConstructors = async (
     }
 
     // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `constructors-${req?.body?.year}`,
-      60 * 60,
-      JSON.stringify({ constructors: { year: req?.body?.year, constructors } })
-    );
+    // await redisClient.setEx(
+    //   `constructors-${req?.body?.year}`,
+    //   60 * 60,
+    //   JSON.stringify({ constructors: { year: req?.body?.year, constructors } })
+    // );
 
     // Return the year and the constructors
 
@@ -182,12 +182,12 @@ export const getCircuits = async (
       }
     }
 
-    // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `circuits-${req?.body?.year}`,
-      60 * 60,
-      JSON.stringify({ circuits: { year: req?.body?.year, circuits } })
-    );
+    // // 1 hour since this data is in DB and don't need to call API
+    // await redisClient.setEx(
+    //   `circuits-${req?.body?.year}`,
+    //   60 * 60,
+    //   JSON.stringify({ circuits: { year: req?.body?.year, circuits } })
+    // );
 
     // Return the year and the circuits
     res
@@ -250,11 +250,11 @@ export const getSchedule = async (
     }
 
     // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `schedule-${req?.body?.year}`,
-      60 * 60,
-      JSON.stringify({ schedule: { year: req?.body?.year, schedule } })
-    );
+    // await redisClient.setEx(
+    //   `schedule-${req?.body?.year}`,
+    //   60 * 60,
+    //   JSON.stringify({ schedule: { year: req?.body?.year, schedule } })
+    // );
 
     // Return the schedule and the year
     res
@@ -281,6 +281,8 @@ export const getDriverStandings = async (
 ): Promise<void> => {
   try {
     let standings;
+
+    console.log(req?.body);
 
     // Not current year (standings can be saved as they wont change)
     if (req?.body?.year != new Date().getFullYear()) {
@@ -321,13 +323,13 @@ export const getDriverStandings = async (
       }
 
       // 1 hour since this data is in DB and don't need to call API
-      await redisClient.setEx(
-        `drivers-standings-${req?.body?.year}`,
-        60 * 60,
-        JSON.stringify({
-          standings: { year: req?.body?.year, standings: standings },
-        })
-      );
+      // await redisClient.setEx(
+      //   `drivers-standings-${req?.body?.year}`,
+      //   60 * 60,
+      //   JSON.stringify({
+      //     standings: { year: req?.body?.year, standings: standings },
+      //   })
+      // );
 
       // Return the year and the standings
       res
@@ -345,10 +347,15 @@ export const getDriverStandings = async (
         result?.data?.MRData?.StandingsTable?.StandingsLists[0]
           ?.DriverStandings;
 
-      // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
+      if (!standings || standings?.length == 0) {
+        console.log("Driver Standings unavailable.");
+        throw new Error("Data unavailable");
+      }
+
+      // 24 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
       await redisClient.setEx(
         `drivers-standings-${req?.body?.year}`,
-        60 * 60 * 12,
+        60 * 60 * 24,
         JSON.stringify({
           standings: { year: req?.body?.year, standings: { standings } },
         })
@@ -419,13 +426,13 @@ export const getConstructorStandings = async (
       }
 
       // 1 hour since this data is in DB and don't need to call API
-      await redisClient.setEx(
-        `constructors-standings-${req?.body?.year}`,
-        60 * 60,
-        JSON.stringify({
-          standings: { year: req?.body?.year, standings: standings },
-        })
-      );
+      // await redisClient.setEx(
+      //   `constructors-standings-${req?.body?.year}`,
+      //   60 * 60,
+      //   JSON.stringify({
+      //     standings: { year: req?.body?.year, standings: standings },
+      //   })
+      // );
 
       // Return the year and the standings
       res
@@ -441,10 +448,15 @@ export const getConstructorStandings = async (
         result?.data?.MRData?.StandingsTable?.StandingsLists[0]
           ?.ConstructorStandings;
 
-      // 12 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
+      if (!standings || standings?.length == 0) {
+        console.log("Driver Standings unavailable.");
+        throw new Error("Data unavailable");
+      }
+
+      // 24 hours as this data cannot be persisted in DB and thus cached longer (doesn't change frequently but called a lot)
       await redisClient.setEx(
         `constructors-standings-${req?.body?.year}`,
-        60 * 60 * 12,
+        60 * 60 * 24,
         JSON.stringify({
           standings: { year: req?.body?.year, standings: { standings } },
         })
@@ -506,17 +518,17 @@ export const getRaceResult = async (
         });
 
         // 1 hour since this data is in DB and don't need to call API
-        await redisClient.setEx(
-          `race-result-${req?.body?.year}-${req?.body?.round}`,
-          60 * 60,
-          JSON.stringify({
-            result: {
-              year: req?.body?.year,
-              round: req?.body?.round,
-              result: result,
-            },
-          })
-        );
+        // await redisClient.setEx(
+        //   `race-result-${req?.body?.year}-${req?.body?.round}`,
+        //   60 * 60,
+        //   JSON.stringify({
+        //     result: {
+        //       year: req?.body?.year,
+        //       round: req?.body?.round,
+        //       result: result,
+        //     },
+        //   })
+        // );
 
         // Return the year and the result
         res.status(200).send({
@@ -533,17 +545,17 @@ export const getRaceResult = async (
     }
 
     // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `race-result-${req?.body?.year}-${req?.body?.round}`,
-      60 * 60,
-      JSON.stringify({
-        result: {
-          year: req?.body?.year,
-          round: req?.body?.round,
-          result: result,
-        },
-      })
-    );
+    // await redisClient.setEx(
+    //   `race-result-${req?.body?.year}-${req?.body?.round}`,
+    //   60 * 60,
+    //   JSON.stringify({
+    //     result: {
+    //       year: req?.body?.year,
+    //       round: req?.body?.round,
+    //       result: result,
+    //     },
+    //   })
+    // );
 
     // Return the year and the result
     res.status(200).send({
@@ -608,17 +620,17 @@ export const getQualifyingResult = async (
     }
 
     // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `qualifying-result-${req?.body?.year}-${req?.body?.round}`,
-      60 * 60,
-      JSON.stringify({
-        result: {
-          year: req?.body?.year,
-          round: req?.body?.round,
-          result: result,
-        },
-      })
-    );
+    // await redisClient.setEx(
+    //   `qualifying-result-${req?.body?.year}-${req?.body?.round}`,
+    //   60 * 60,
+    //   JSON.stringify({
+    //     result: {
+    //       year: req?.body?.year,
+    //       round: req?.body?.round,
+    //       result: result,
+    //     },
+    //   })
+    // );
 
     // Return the year and the result
     res.status(200).send({
@@ -684,17 +696,17 @@ export const getSprintResult = async (
     }
 
     // 1 hour since this data is in DB and don't need to call API
-    await redisClient.setEx(
-      `sprint-result-${req?.body?.year}-${req?.body?.round}`,
-      60 * 60,
-      JSON.stringify({
-        result: {
-          year: req?.body?.year,
-          round: req?.body?.round,
-          result: result,
-        },
-      })
-    );
+    // await redisClient.setEx(
+    //   `sprint-result-${req?.body?.year}-${req?.body?.round}`,
+    //   60 * 60,
+    //   JSON.stringify({
+    //     result: {
+    //       year: req?.body?.year,
+    //       round: req?.body?.round,
+    //       result: result,
+    //     },
+    //   })
+    // );
 
     // Return the year and the result
     res.status(200).send({
@@ -901,6 +913,35 @@ export const getPostById = async (
       res.status(404).send({ error: "Could not find post." });
       return;
     }
+  } catch (err) {
+    // Sending error
+    console.log(err);
+    res.status(500).send({ data: "Something went wrong." });
+    return;
+  }
+};
+
+// Get the details for the next race
+export const getNextRace = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    let response = await axios.get(
+      `https://api.jolpi.ca/ergast/f1/current/next`
+    );
+
+    let result = response?.data?.MRData?.RaceTable?.Races[0];
+
+    // 12 hour cache duration
+    await redisClient.setEx(
+      `next-race`,
+      60 * 60 * 12,
+      JSON.stringify({ nextRace: result })
+    );
+
+    // Return the next race
+    res.status(200).send({ nextRace: result });
   } catch (err) {
     // Sending error
     console.log(err);

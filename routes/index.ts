@@ -1,53 +1,70 @@
-import { Router } from "express"
-import { createPost, getAllRecentPosts, getCircuits, getConstructorStandings, getConstructors, getDriverStandings, getDrivers, getPostById, getQualifyingResult, getRaceResult, getSchedule, getSprintResult, updatePost } from "../controllers/index.ts"
-import upload from "../utils/multer.ts"
+import { Router } from "express";
+import {
+  createPost,
+  getAllRecentPosts,
+  getCircuits,
+  getConstructorStandings,
+  getConstructors,
+  getDriverStandings,
+  getDrivers,
+  getNextRace,
+  getPostById,
+  getQualifyingResult,
+  getRaceResult,
+  getSchedule,
+  getSprintResult,
+  updatePost,
+} from "../controllers/index.ts";
+import upload from "../utils/multer.ts";
 
 // Create a router.
-const router = Router()
+const router = Router();
 
 // Default route to check if routes are accessible.
 router.get("/", (req, res) => {
-    res.status(200).send({ data: "Default Route" })
-})
+  res.status(200).send({ data: "Default Route" });
+});
 
 // Get drivers for a specific year.
-router.post("/getDrivers", getDrivers)
+router.post("/getDrivers", getDrivers);
 
 // Get constructors for a specific year.
-router.post("/getConstructors", getConstructors)
+router.post("/getConstructors", getConstructors);
 
 // Get circuits for a specific year.
-router.post("/getCircuits", getCircuits)
+router.post("/getCircuits", getCircuits);
 
 // Get circuits for a specific year.
-router.post("/getSchedule", getSchedule)
+router.post("/getSchedule", getSchedule);
 
 // Get driver standings for a specific year.
-router.post("/getDriverStandings", getDriverStandings)
+router.post("/getDriverStandings", getDriverStandings);
 
 // Get constructor standings for a specific year.
-router.post("/getConstructorStandings", getConstructorStandings)
+router.post("/getConstructorStandings", getConstructorStandings);
 
 // Get result for a specific race.
-router.post("/getRaceResult", getRaceResult)
+router.post("/getRaceResult", getRaceResult);
 
 // Get result for a specific race.
-router.post("/getQualifyingResult", getQualifyingResult)
+router.post("/getQualifyingResult", getQualifyingResult);
 
 // Get result for a specific sprint race.
-router.post("/getSprintResult", getSprintResult)
+router.post("/getSprintResult", getSprintResult);
+
+// Get Details for the next race.
+router.get("/getNextRace", getNextRace);
 
 // Create a new post.
-router.post("/create-post", upload.single("file"), createPost)
+router.post("/create-post", upload.single("file"), createPost);
 
 // Update a post
-router.post("/update-post", upload.single("file"), updatePost)
+router.post("/update-post", upload.single("file"), updatePost);
 
 // Get recent posts from DB.
-router.post("/get-recent-posts", getAllRecentPosts)
+router.post("/get-recent-posts", getAllRecentPosts);
 
 // Get specific post from DB.
-router.post("/get-post", getPostById)
+router.post("/get-post", getPostById);
 
-
-export default router
+export default router;
