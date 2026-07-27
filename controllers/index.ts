@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cloudinary from "../utils/cloudinary.ts";
 import { v4 } from "uuid";
 import { redisClient } from "../utils/redis.ts";
-import axios from "axios";
+import { jolpicaClient } from "../utils/jolpicaClient.ts";
 import { Request, Response } from "express";
 dotenv.config();
 
@@ -27,8 +27,8 @@ export const getDrivers = async (
 
     // If database entry is not present, fetch from the API
     if (!drivers) {
-      let response = await axios.get(
-        `http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}/drivers`
+      let response = await jolpicaClient.get(
+        `${String(req?.body?.year)}/drivers`
       );
 
       drivers = response?.data?.MRData?.DriverTable?.Drivers;
@@ -92,8 +92,8 @@ export const getConstructors = async (
 
     // If database entry does not exist, fetch from API
     if (!constructors) {
-      let response = await axios.get(
-        `http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}/constructors`
+      let response = await jolpicaClient.get(
+        `${String(req?.body?.year)}/constructors`
       );
 
       constructors = response?.data?.MRData?.ConstructorTable?.Constructors;
@@ -160,8 +160,8 @@ export const getCircuits = async (
 
     // If not present in DB, fetch from API.
     if (!circuits) {
-      let response = await axios.get(
-        `http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}/circuits`
+      let response = await jolpicaClient.get(
+        `${String(req?.body?.year)}/circuits`
       );
 
       circuits = response?.data?.MRData?.CircuitTable?.Circuits;
@@ -227,8 +227,8 @@ export const getSchedule = async (
 
     // If not present in DB, fetch from API
     if (!schedule) {
-      let response = await axios.get(
-        `http://api.jolpi.ca/ergast/f1/${String(req?.body?.year)}`
+      let response = await jolpicaClient.get(
+        `${String(req?.body?.year)}`
       );
 
       schedule = response?.data?.MRData?.RaceTable?.Races;
@@ -298,8 +298,8 @@ export const getDriverStandings = async (
 
       // If standings are not present in db, fetch from api.
       if (!standings) {
-        let result = await axios.get(
-          `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/driverstandings`
+        let result = await jolpicaClient.get(
+          `${req?.body?.year}/driverstandings`
         );
 
         standings =
@@ -339,8 +339,8 @@ export const getDriverStandings = async (
     }
     // For current year, standings cannot be stored as they can change
     else {
-      let result = await axios.get(
-        `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/driverstandings`
+      let result = await jolpicaClient.get(
+        `${req?.body?.year}/driverstandings`
       );
 
       standings =
@@ -401,8 +401,8 @@ export const getConstructorStandings = async (
 
       // If standings are not present in db, fetch from api.
       if (!standings) {
-        let result = await axios.get(
-          `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/constructorstandings`
+        let result = await jolpicaClient.get(
+          `${req?.body?.year}/constructorstandings`
         );
 
         standings =
@@ -440,8 +440,8 @@ export const getConstructorStandings = async (
         .send({ standings: { year: req?.body?.year, standings: standings } });
       return;
     } else {
-      let result = await axios.get(
-        `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/constructorstandings`
+      let result = await jolpicaClient.get(
+        `${req?.body?.year}/constructorstandings`
       );
 
       standings =
@@ -498,8 +498,8 @@ export const getRaceResult = async (
 
     // If not present in DB, fetch from API.
     if (!result) {
-      let response = await axios.get(
-        `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/${req?.body?.round}/results`
+      let response = await jolpicaClient.get(
+        `${req?.body?.year}/${req?.body?.round}/results`
       );
 
       result = response?.data?.MRData?.RaceTable?.Races[0];
@@ -596,8 +596,8 @@ export const getQualifyingResult = async (
 
     // If not present in DB, fetch from API.
     if (!result) {
-      let response = await axios.get(
-        `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/${req?.body?.round}/qualifying`
+      let response = await jolpicaClient.get(
+        `${req?.body?.year}/${req?.body?.round}/qualifying`
       );
 
       result = response?.data?.MRData?.RaceTable?.Races[0];
@@ -672,8 +672,8 @@ export const getSprintResult = async (
 
     // If not present in DB, fetch from API.
     if (!result) {
-      let response = await axios.get(
-        `https://api.jolpi.ca/ergast/f1/${req?.body?.year}/${req?.body?.round}/sprint`
+      let response = await jolpicaClient.get(
+        `${req?.body?.year}/${req?.body?.round}/sprint`
       );
 
       result = response?.data?.MRData?.RaceTable?.Races[0];
@@ -927,9 +927,7 @@ export const getNextRace = async (
   res: Response
 ): Promise<void> => {
   try {
-    let response = await axios.get(
-      `https://api.jolpi.ca/ergast/f1/current/next`
-    );
+    let response = await jolpicaClient.get(`current/next`);
 
     let result = response?.data?.MRData?.RaceTable?.Races[0];
 
