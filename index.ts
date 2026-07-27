@@ -1,4 +1,3 @@
-import http from "http";
 import express, { Express } from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
@@ -16,7 +15,6 @@ import middleware from "./middleware/index.ts";
 // Initializing Server -------------------------------------------------------------------------------------------
 
 const app: Express = express();
-let server = http.createServer(app);
 
 // Using Middleware -------------------------------------------------------------------------------------------
 
@@ -33,8 +31,13 @@ const corsOptions: CorsOptions = {
     origin: string | undefined,
     callback: (err: Error | null, allow?: boolean) => void
   ) {
+    // Allow requests with no origin (e.g. server-to-server, Vercel health checks)
+    if (!origin) {
+      callback(null, true);
+      return;
+    }
     // Find request domain and check in whitelist.
-    if (origin && whitelist.indexOf(origin) !== -1) {
+    if (whitelist.indexOf(origin) !== -1) {
       // Accept request
       callback(null, true);
     } else {
@@ -64,8 +67,5 @@ app.get("/", (_, res) => {
 
 app.use("/api/v1", middleware, routes);
 
-// Listening on PORT -------------------------------------------------------------------------------------------
-
-server.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
-});
+// Export app for Vercel serverless deployment
+export default app;
